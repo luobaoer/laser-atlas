@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f5f7f5" />
-  <meta name="description" content="Laser Atlas：面向光学工程师的可交互激光技术学习平台。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
+  <meta name="description" content="Laser Atlas v0.3.0：面向光学工程师的可交互激光技术学习平台。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
   <meta property="og:title" content="Laser Atlas · 激光器设计学习平台" />
   <meta property="og:description" content="沿真实激光器设计流程系统学习。术语点按解释，公式字母可查可记。" />
-  <title>Laser Atlas · 激光器设计学习平台</title>
+  <title>Laser Atlas · 激光器设计学习平台 v0.3.0</title>
   <style>
 :root{--bg:#f5f7f5;--surface:#fff;--ink:#152b28;--muted:#76837f;--muted2:#9da9a5;--border:#e3eae6;--brand:#123a35;--green:#138461;--green-bright:#30ba8c;--highlight:#edf7f2;--shadow:0 12px 40px rgba(25,55,45,.04);--sidebar:#12322e;--radius:19px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased;line-height:1.65}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible, [tabindex]:focus-visible{outline:3px solid #57c9a6;outline-offset:2px}a{text-decoration:none;color:inherit}p{margin:0 0 13px}h1,h2,h3,h4{letter-spacing:-.025em;line-height:1.35;margin:0;color:var(--ink)}h1{font-size:36px;font-weight:740}h2{font-size:26px}h3{font-size:18px}small{font-size:12px}strong{font-weight:700}svg{display:block}::selection{background:#aeead2;color:#12322e}
@@ -87,7 +87,7 @@ body.is-teaching .sidebar,body.is-teaching .topbar,body.is-teaching .mobile-bott
         </div>
       </header>
       <main class="page-content" id="page" tabindex="-1"></main>
-      <footer class="app-footer"><span>LASER ATLAS · 学习是理解设计决策，而不只是得到结果</span><span>所有计算工具均为教学近似，不代替工程验证</span></footer>
+      <footer class="app-footer"><span>LASER ATLAS · v0.3.0（2026-10-29） · 学习是理解设计决策，而不只是得到结果</span><span>所有计算工具均为教学近似，不代替工程验证</span></footer>
     </div>
     <nav class="mobile-bottom" aria-label="手机快捷导航"><a href="#/home"><span>⌂</span>首页</a><a href="#/course/solid"><span>◈</span>设计课</a><a href="#/formulas/solid"><span>ƒ</span>公式</a><a href="#/notes"><span>▧</span>笔记</a></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -569,7 +569,207 @@ window.LASER_FORMULAS=[
 ];
 })();
 
+
 </script>
+  <script>
+(() => {
+  const solid = (window.LASER_COURSES || []).find(c => c.id === 'solid');
+  const lesson = solid?.lessons?.find(l => l.id === 'solid-03');
+  if (lesson && !lesson.sections.some(s => /传播矩阵原理/.test(s.title))) {
+    lesson.sections.splice(2, 0, {
+      title:'传播矩阵原理：把一段光路写成 2×2',
+      body:`<p>传播矩阵法的核心并不神秘：在近轴近似下，只要记录某一截面的<strong>光线高度</strong> <span class="formula-inline">y</span> 和<strong>倾角</strong> <span class="formula-inline">θ</span>，就可以把这一截面的光线状态写成列向量 <span class="formula-inline">[y, θ]<sup>T</sup></span>。光线经过任意一个简单光学段后，输出状态仍然与输入状态保持线性关系：</p>
+      <div class="formula">[y₂, θ₂]<sup>T</sup> = [[A, B], [C, D]] [y₁, θ₁]<sup>T</sup></div>
+      <p>因此，自由传播、薄透镜、球面镜、热透镜都能分别写成一个 2×2 矩阵；而完整光路只需要按经过顺序依次相乘。这就是“传播矩阵”或“ABCD 矩阵”的本质。</p>
+      <div style="margin:14px 0;padding:14px;border:1px solid #e3eae6;border-radius:16px;background:#fbfcfb;overflow:auto">
+        <svg viewBox="0 0 760 260" width="100%" role="img" aria-label="传播矩阵图解：自由传播、薄透镜与矩阵连乘">
+          <defs>
+            <marker id="arrA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d5e59"/></marker>
+            <marker id="arrB" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#d67c47"/></marker>
+          </defs>
+          <rect x="12" y="18" width="224" height="224" rx="16" fill="#ffffff" stroke="#dfe7e3"/>
+          <rect x="268" y="18" width="224" height="224" rx="16" fill="#ffffff" stroke="#dfe7e3"/>
+          <rect x="524" y="18" width="224" height="224" rx="16" fill="#ffffff" stroke="#dfe7e3"/>
+          <text x="30" y="44" font-size="18" font-weight="700" fill="#173430">① 自由传播</text>
+          <line x1="34" y1="132" x2="212" y2="132" stroke="#294944" stroke-width="2"/>
+          <line x1="60" y1="96" x2="194" y2="132" stroke="#2d5e59" stroke-width="3" marker-end="url(#arrA)"/>
+          <line x1="60" y1="168" x2="194" y2="132" stroke="#2d5e59" stroke-width="3" marker-end="url(#arrA)"/>
+          <text x="38" y="84" font-size="14" fill="#6a7974">输入：y₁, θ₁</text>
+          <text x="132" y="84" font-size="14" fill="#6a7974">距离 d</text>
+          <text x="92" y="206" font-size="18" fill="#173430">P(d) = [[1, d], [0, 1]]</text>
+          <text x="38" y="226" font-size="12" fill="#6a7974">高度会因传播距离变化；角度保持不变</text>
+
+          <text x="286" y="44" font-size="18" font-weight="700" fill="#173430">② 薄透镜 / 热透镜</text>
+          <line x1="290" y1="132" x2="468" y2="132" stroke="#294944" stroke-width="2"/>
+          <line x1="382" y1="72" x2="382" y2="192" stroke="#d67c47" stroke-width="6"/>
+          <line x1="320" y1="102" x2="382" y2="118" stroke="#2d5e59" stroke-width="3"/>
+          <line x1="382" y1="118" x2="438" y2="132" stroke="#2d5e59" stroke-width="3" marker-end="url(#arrA)"/>
+          <line x1="320" y1="162" x2="382" y2="146" stroke="#2d5e59" stroke-width="3"/>
+          <line x1="382" y1="146" x2="438" y2="132" stroke="#2d5e59" stroke-width="3" marker-end="url(#arrA)"/>
+          <text x="350" y="66" font-size="14" fill="#6a7974">焦距 f</text>
+          <text x="316" y="206" font-size="18" fill="#173430">F(f) = [[1, 0], [−1/f, 1]]</text>
+          <text x="294" y="226" font-size="12" fill="#6a7974">高度近似不变；角度被“折一下”</text>
+
+          <text x="542" y="44" font-size="18" font-weight="700" fill="#173430">③ 连乘得到整段光路</text>
+          <rect x="548" y="72" width="174" height="52" rx="12" fill="#edf7f2" stroke="#cfe3dc"/>
+          <text x="564" y="103" font-size="17" fill="#173430">M = P(d₂) · F(f) · P(d₁)</text>
+          <line x1="568" y1="146" x2="704" y2="146" stroke="#d67c47" stroke-width="3" marker-end="url(#arrB)"/>
+          <text x="566" y="176" font-size="18" fill="#173430">[y_out, θ_out]<sup>T</sup></text>
+          <text x="566" y="198" font-size="18" fill="#173430">= M [y_in, θ_in]<sup>T</sup></text>
+          <text x="542" y="226" font-size="12" fill="#6a7974">折叠腔、晶体、热透镜、本征腔模都靠这一步扩展</text>
+        </svg>
+      </div>
+      <div class="step-list"><div><b>Step 1 · 先定义截面</b><small>在某个参考面记录光线状态 <span class="formula-inline">[y, θ]</span>。</small></div><div><b>Step 2 · 写单段矩阵</b><small>自由空间、透镜、镜面、介质边界分别写出 ABCD。</small></div><div><b>Step 3 · 按顺序相乘</b><small>最先遇到的元件写在最右侧，最后遇到的写在最左侧。</small></div><div><b>Step 4 · 过渡到高斯模</b><small>把标量光线变量推广为复参数 <span class="formula-inline">q</span>，得到 <span class="formula-inline">q'=(Aq+B)/(Cq+D)</span>。</small></div></div>
+      <p><a class="text-link" href="#/principle/raymatrix">展开图解原理专题 →</a>　<a class="text-link" href="#/formulas/solid">去看公式字母手册 →</a></p>`
+    });
+    lesson.min = Math.max(lesson.min || 0, 20);
+    if (Array.isArray(lesson.goals) && !lesson.goals.some(g => /传播矩阵/.test(g))) lesson.goals.push('理解传播矩阵如何从光线变量过渡到 q 参数');
+  }
+
+  if (!(window.LASER_PRINCIPLES || []).some(p => p.id === 'raymatrix')) {
+    (window.LASER_PRINCIPLES = window.LASER_PRINCIPLES || []).push({
+      id:'raymatrix', course:'solid', title:'传播矩阵原理（图解）', subtitle:'从 [y, θ] 到 q 参数，再到谐振腔往返矩阵', lesson:'solid-03',
+      sections:[
+        {title:'1. 先别急着记公式：矩阵到底在描述什么？', body:`<p>传播矩阵法的出发点，是把一条近轴光线在某个截面的状态写成两个量：<strong>光线离光轴的高度</strong> <span class="formula-inline">y</span>，以及<strong>相对光轴的倾角</strong> <span class="formula-inline">θ</span>。这两个量组成列向量 <span class="formula-inline">[y, θ]<sup>T</sup></span>。如果一个光学段足够接近近轴线性系统，那么输出一定可以写成输入的线性变换：</p><div class="formula">[y₂, θ₂]<sup>T</sup> = [[A, B], [C, D]] [y₁, θ₁]<sup>T</sup></div><p>所以，矩阵不是“为了数学而数学”，而是在告诉你：<strong>该光学段会怎样改变光线高度和传播方向</strong>。</p>`},
+        {title:'2. 三个最常用的基本块', body:`<div style="margin:8px 0 14px;padding:14px;border:1px solid #e3eae6;border-radius:16px;background:#fbfcfb;overflow:auto"><svg viewBox="0 0 760 300" width="100%" role="img" aria-label="传播矩阵基本块图解"><rect x="16" y="18" width="228" height="264" rx="16" fill="#fff" stroke="#dfe7e3"/><rect x="266" y="18" width="228" height="264" rx="16" fill="#fff" stroke="#dfe7e3"/><rect x="516" y="18" width="228" height="264" rx="16" fill="#fff" stroke="#dfe7e3"/><text x="34" y="44" font-size="18" font-weight="700" fill="#173430">自由传播 P(d)</text><line x1="40" y1="130" x2="220" y2="130" stroke="#294944" stroke-width="2"/><line x1="58" y1="92" x2="196" y2="130" stroke="#2d5e59" stroke-width="3"/><line x1="58" y1="168" x2="196" y2="130" stroke="#2d5e59" stroke-width="3"/><text x="48" y="216" font-size="20" fill="#173430">[[1, d], [0, 1]]</text><text x="40" y="242" font-size="13" fill="#6a7974">高度变化 ∝ 传播距离；角度保持</text><text x="284" y="44" font-size="18" font-weight="700" fill="#173430">薄透镜 F(f)</text><line x1="290" y1="130" x2="470" y2="130" stroke="#294944" stroke-width="2"/><line x1="380" y1="72" x2="380" y2="188" stroke="#d67c47" stroke-width="6"/><line x1="320" y1="102" x2="380" y2="118" stroke="#2d5e59" stroke-width="3"/><line x1="380" y1="118" x2="440" y2="130" stroke="#2d5e59" stroke-width="3"/><line x1="320" y1="158" x2="380" y2="142" stroke="#2d5e59" stroke-width="3"/><line x1="380" y1="142" x2="440" y2="130" stroke="#2d5e59" stroke-width="3"/><text x="300" y="216" font-size="20" fill="#173430">[[1, 0], [−1/f, 1]]</text><text x="290" y="242" font-size="13" fill="#6a7974">高度近似不变；角度被聚焦改变</text><text x="534" y="44" font-size="18" font-weight="700" fill="#173430">球面镜 M(R)</text><line x1="540" y1="130" x2="708" y2="130" stroke="#294944" stroke-width="2"/><path d="M650 74 Q690 130 650 186" fill="none" stroke="#d67c47" stroke-width="6"/><line x1="560" y1="98" x2="648" y2="120" stroke="#2d5e59" stroke-width="3"/><line x1="648" y1="120" x2="574" y2="130" stroke="#2d5e59" stroke-width="3"/><line x1="560" y1="162" x2="648" y2="140" stroke="#2d5e59" stroke-width="3"/><line x1="648" y1="140" x2="574" y2="130" stroke="#2d5e59" stroke-width="3"/><text x="548" y="216" font-size="20" fill="#173430">[[1, 0], [−2/R, 1]]</text><text x="534" y="242" font-size="13" fill="#6a7974">反射后方向改变；常见于腔镜</text></svg></div><p>在谐振腔里，这三个基本块最常见：自由空间段、等效热透镜、曲面腔镜。复杂腔并不意味着需要全新公式，而是把这些基本块按实际顺序连起来。</p>`},
+        {title:'3. 为什么顺序很重要？', body:`<p>矩阵乘法<strong>不可交换</strong>。先传播再过透镜，与先过透镜再传播，结果不同。因此写总矩阵时必须忠实记录真实光路顺序。例如：</p><div class="formula">M_total = P(d₂) · F(f) · P(d₁)</div><p>这表示：光线先在右边的 <span class="formula-inline">P(d₁)</span> 中传播，再通过透镜 <span class="formula-inline">F(f)</span>，最后传播 <span class="formula-inline">P(d₂)</span>。当你做三镜折叠腔时，要把每个元件与每段距离都拆开写清楚，而不是直接把总长度塞进一个两镜公式。</p>`},
+        {title:'4. 从光线传播到高斯模传播', body:`<p>传播矩阵最初描述的是几何光线，但高斯光束同样服从 ABCD 形式。把光束写成复参数 <span class="formula-inline">q</span> 后，有：</p><div class="formula">q' = (Aq + B) / (Cq + D)</div><p>其中 <span class="formula-inline">1/q = 1/R - iλ/(πw²)</span>（具体符号随约定略有不同）。解出谐振腔的自洽条件后，你就能知道束腰位置、各镜面光斑和晶体内光斑。也就是说：</p><div class="step-list"><div><b>光线矩阵</b><small>帮助你理解元件对 <span class="formula-inline">y, θ</span> 的作用。</small></div><div><b>q 参数传播</b><small>帮助你求 TEM₀₀ 腔模和各处光斑尺寸。</small></div><div><b>往返矩阵</b><small>帮助你判断稳定性与热透镜容差。</small></div></div>`},
+        {title:'5. 在 355 nm 折叠腔里怎么用？', body:`<p>对 Nd:YVO₄ 三镜折叠腔，推荐按下面顺序练习：</p><div class="step-list"><div><b>01 · 两镜空腔</b><small>先用平凹腔建立对稳定区、束腰和镜面光斑的直觉。</small></div><div><b>02 · 加入热透镜</b><small>把 Nd:YVO₄ 等效为薄透镜，看稳定区如何漂移。</small></div><div><b>03 · 改为折叠腔</b><small>加入 M2，并把前后臂分段写出总矩阵。</small></div><div><b>04 · 分两轴处理</b><small>若 M2 斜入射，分别计算切向/弧矢方向 ABCD。</small></div><div><b>05 · 沿腔传播 q</b><small>求出 AOM、SHG、SFG 晶体处的光斑大小，为选型与位置优化服务。</small></div></div><p><a class="text-link" href="#/lesson/solid-03">回到《高斯光束、ABCD 与腔长》 →</a>　<a class="text-link" href="#/lesson/solid-04">继续学习三镜折叠腔 →</a></p>`}
+      ]
+    });
+  }
+})();
+  </script>
+  <style>
+    .matrix-lab{background:#f9fcfa;border:1px solid #dbe9df;border-radius:20px;padding:20px;margin:18px 0 20px}
+    .matrix-lab-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+    .matrix-lab-head strong{color:#205c43;font-size:15px}.matrix-lab-head small{color:#768b7e;font-size:11px}
+    .matrix-lab-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 20px}
+    .matrix-lab label{display:block;font-weight:700;color:#34574d;font-size:12px}
+    .matrix-lab label .ml-value{float:right;color:#28765c;font-weight:850}
+    .matrix-lab input[type=range]{display:block;width:100%;accent-color:#178967;margin:9px 0 2px}
+    .ml-diagram{margin:15px 0;padding:10px;border:1px solid #e3eae6;background:white;border-radius:14px;overflow:hidden}
+    .ml-diagram svg{display:block;width:100%;max-height:280px}
+    .ml-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
+    .ml-result{border:1px solid #dfebe5;background:white;border-radius:12px;padding:12px}
+    .ml-result span{display:block;font-size:11px;color:#7a8b83}.ml-result strong{display:block;font-size:17px;color:#205741;margin-top:4px;font-variant-numeric:tabular-nums}
+    .ml-steps{background:#eef7f1;border-radius:12px;padding:13px 16px;margin-top:12px;font-size:13px;line-height:1.8;color:#385d4e}
+    .ml-steps div+div{margin-top:4px}.ml-step-title{font-weight:750;color:#205c43}
+    .ml-clear{border:1px solid #b9dac7;border-radius:10px;background:white;color:#1b694b;padding:9px 12px;font-size:12px;font-weight:750;cursor:pointer}
+    .ml-note{font-size:11px;color:#708579;line-height:1.65;margin-top:12px}
+    .theory-mini-quiz{border:1px solid #dce9e2;background:#fff;padding:16px;border-radius:14px;margin:14px 0}
+    .theory-mini-quiz summary{font-weight:700;color:#235c45;cursor:pointer}
+    .matrix-learning-alert{margin:12px 0 16px;background:#edf7f1;padding:12px 15px;border-left:3px solid #3ca477;border-radius:10px;color:#315c46;font-size:13px}
+    @media(max-width:680px){.matrix-lab{padding:14px}.matrix-lab-grid{grid-template-columns:1fr}.ml-cards{grid-template-columns:1fr 1fr}.ml-result{padding:10px}.ml-result strong{font-size:15px}}
+  </style>
+  <script>
+(() => {
+  'use strict';
+  const p=(window.LASER_PRINCIPLES||[]).find(x=>x.id==='raymatrix');
+  const lessons=window.LASER_COURSES?.find(x=>x.id==='solid')?.lessons||[];
+  const lesson=lessons.find(x=>x.id==='solid-03');
+  if(lesson){
+    const target=lesson.sections.find(x=>x.title.includes('传播矩阵原理'));
+    if(target){
+      target.body=target.body.replace(/<p>传播矩阵法的核心/, '<div class="matrix-learning-alert"><b>今日学习目标：</b>理解 2×2 矩阵怎样描述高度与角度的变化，能自己推导自由空间和薄透镜矩阵，并能正确判断连乘顺序。</div><p>传播矩阵法的核心');
+    }
+  }
+  if(p){
+    p.sections.forEach(x=>{x.title=x.title.replace(/^\d+\.\s*/, '');});
+    p.sections.splice(0,0,{
+      title:'矩阵乘法基础：为什么是“行乘列”？',
+      body:`<p>一条光线只需要两个变量，所以 2×2 矩阵足够。设一个矩阵 <span class="formula-inline">M=[[a,b],[c,d]]</span>，输入列向量为 <span class="formula-inline">r=[y,θ]ᵀ</span>：</p><div class="formula">M r = [ay + bθ, cy + dθ]ᵀ</div><p>含义是：<strong>输出高度</strong>由输入高度与角度共同决定；<strong>输出角度</strong>也由输入高度与角度共同决定。两行分别对应两个输出量，这就是“行乘列”的由来。</p><div class="matrix-learning-alert"><b>特别重要：</b>矩阵乘法不满足一般交换律。光路的先后顺序是真实物理信息，不能把元件顺序随意颠倒。</div>`
+    });
+    p.sections.push({
+      title:'6. 动手计算：传播 → 透镜 → 传播',
+      body:`<p>用真实的数值验证矩阵连乘。下面这套模型是：<b>先在空气中传播 d₁ → 经过焦距 f 的理想薄透镜 → 再传播 d₂</b>。输入是一条近轴光线的高度 y₀ 和倾角 θ₀。你可以拖动参数，然后逐段核对计算。</p>
+      <div class="matrix-lab" id="matrixLab">
+        <div class="matrix-lab-head"><strong>光线传播矩阵 · 交互练习</strong><button type="button" class="ml-clear" data-ml-reset>恢复书本例子</button></div>
+        <div class="matrix-lab-grid">
+          <label>d₁ · 透镜前距离 <span class="ml-value" data-ml="d1v">100 mm</span><input id="mlD1" type="range" min="0" max="300" step="10" value="100"/></label>
+          <label>f · 透镜焦距 <span class="ml-value" data-ml="fv">200 mm</span><input id="mlF" type="range" min="50" max="500" step="10" value="200"/></label>
+          <label>d₂ · 透镜后距离 <span class="ml-value" data-ml="d2v">100 mm</span><input id="mlD2" type="range" min="0" max="300" step="10" value="100"/></label>
+          <label>y₀ · 初始高度 <span class="ml-value" data-ml="y0v">1.0 mm</span><input id="mlY0" type="range" min="-3" max="3" step="0.5" value="1"/></label>
+          <label>θ₀ · 初始倾角 <span class="ml-value" data-ml="t0v">0.0 mrad</span><input id="mlT0" type="range" min="-20" max="20" step="1" value="0"/></label>
+        </div>
+        <div class="ml-diagram">
+          <svg viewBox="0 0 760 260" role="img" aria-label="可调自由传播、薄透镜和输出光线图">
+            <rect x="12" y="12" width="736" height="236" rx="13" fill="#fcfefd" stroke="#e6efe9"/>
+            <line x1="50" y1="132" x2="705" y2="132" stroke="#b2c8bc" stroke-width="2" stroke-dasharray="7 5"/>
+            <line x1="376" y1="34" x2="376" y2="232" stroke="#d67c47" stroke-width="7"/>
+            <text x="60" y="36" font-size="17" fill="#466e5a">输入</text><text x="337" y="27" font-size="17" fill="#ba6b3d">薄透镜 f</text><text x="650" y="36" font-size="17" fill="#466e5a">输出</text>
+            <text x="158" y="220" font-size="17" fill="#466e5a">自由传播 d₁</text><text x="490" y="220" font-size="17" fill="#466e5a">自由传播 d₂</text>
+            <polyline id="mlRay" points="60,105 376,105 700,165" fill="none" stroke="#14795c" stroke-width="4" stroke-linejoin="round"/>
+            <circle id="mlDotIn" cx="60" cy="105" r="6" fill="#14795c"/><circle id="mlDotAtLens" cx="376" cy="105" r="6" fill="#14795c"/><circle id="mlDotOut" cx="700" cy="165" r="6" fill="#14795c"/>
+            <text x="50" y="247" font-size="12" fill="#779285">图形按自适应比例显示，说明近轴方向变化；不是实际毫米尺寸的机械光路图</text>
+          </svg>
+        </div>
+        <div class="ml-cards">
+          <div class="ml-result"><span>A · 无量纲</span><strong data-ml="A">0.5000</strong></div>
+          <div class="ml-result"><span>B · m</span><strong data-ml="B">0.1500 m</strong></div>
+          <div class="ml-result"><span>C · m⁻¹</span><strong data-ml="C">−5.0000 m⁻¹</strong></div>
+          <div class="ml-result"><span>D · 无量纲</span><strong data-ml="D">0.5000</strong></div>
+          <div class="ml-result"><span>最终光线高度 y₂</span><strong data-ml="yout">0.500 mm</strong></div>
+          <div class="ml-result"><span>最终倾角 θ₂</span><strong data-ml="tout">−5.000 mrad</strong></div>
+        </div>
+        <div class="ml-steps">
+          <div><span class="ml-step-title">① 传播：</span><span data-ml="step1">yₐ = y₀ + d₁θ₀ = 1.000 mm</span></div>
+          <div><span class="ml-step-title">② 透镜：</span><span data-ml="step2">θᵦ = θ₀ − yₐ/f = −5.000 mrad</span></div>
+          <div><span class="ml-step-title">③ 再传播：</span><span data-ml="step3">y₂ = yₐ + d₂θᵦ = 0.500 mm</span></div>
+          <div><span class="ml-step-title">④ 连乘验证：</span><span data-ml="verify">矩阵连乘结果与逐段计算一致</span></div>
+        </div>
+        <p class="ml-note">采用空气中的坐标 r=[y(m), θ(rad)]ᵀ，透镜正焦距为会聚透镜；输入端为毫米与毫弧度，计算时统一转换为 SI 单位。B 的单位是 m，C 的单位是 m⁻¹。此练习为单程光线传播，不是完整的固体激光谐振腔计算。</p>
+      </div>
+      <details class="theory-mini-quiz"><summary>自测题：只在空气中传播 200 mm，y=1 mm、θ=2 mrad，输出是多少？</summary><p>由 y₂=y₁+dθ₁，可得 y₂=1 mm+200 mm×0.002=1.4 mm，角度依然为 2 mrad。</p></details>
+      <p><a class="text-link" href="#/formulas/solid">打开公式符号手册：查 A、B、C、D、y、θ 的含义 →</a></p>`
+    });
+  }
+  const terms=window.LASER_TERMS||[];
+  for(const t of [
+    {id:'paraxial',course:'solid',name:'近轴近似',short:'光线相对光轴倾角较小、离轴距离相对系统尺寸较小的一阶光学近似。',detail:'在该条件下 sinθ≈tanθ≈θ（弧度），可把光线传播线性化。',application:'ABCD 矩阵适用于近轴传播；高数值孔径和明显像差的情况需升级模型。',aliases:['近轴近似'],principle:'raymatrix'},
+    {id:'rayvector',course:'solid',name:'光线状态向量',short:'在某个参考截面用光线高度 y 与传播倾角 θ 组成的二元列向量。',detail:'r=[y,θ]ᵀ，其中上标 T 表示转置。',application:'每个光学元件把输入状态变成输出状态，可写成 2×2 矩阵乘法。',aliases:['光线状态向量','状态向量'],principle:'raymatrix'}
+  ])if(!terms.some(x=>x.id===t.id))terms.push(t);
+
+  const F=window.LASER_FORMULAS||[];
+  const sym=(key,label,meaning,unit,insight)=>({key,label,meaning,unit,insight});
+  const eq=(key,markup)=>`<span class="eq-symbol" tabindex="0" role="button" data-sym="${key}" aria-label="查看 ${key} 的含义">${markup}</span>`;
+  const extra=[
+    {id:'s-ray-vector',course:'solid',stage:3,title:'近轴光线状态向量 / 传输矩阵',expression:`[${eq('y2','y₂')},${eq('theta2','θ₂')}]ᵀ = [[${eq('A','A')},${eq('B','B')}],[${eq('C','C')},${eq('D','D')}]] [${eq('y1','y₁')},${eq('theta1','θ₁')}]ᵀ`,symbols:[sym('y1','y₁','输入截面相对光轴高度','m','可以为正或负'),sym('theta1','θ₁','输入光线相对光轴的角度','rad','近轴时角度用弧度'),sym('y2','y₂','输出截面相对光轴高度','m','由矩阵第一行求得'),sym('theta2','θ₂','输出光线倾角','rad','由矩阵第二行求得'),sym('A','A','对输入光线高度的比例系数','无量纲','A表示高度对高度的贡献'),sym('B','B','输入角度对输出高度的耦合系数','m','与传播路径有关'),sym('C','C','输入高度对输出角度的耦合系数','m⁻¹','与透镜、反射镜聚焦有关'),sym('D','D','输入角度对输出角度的系数','无量纲','应使用一致的坐标约定')],note:'近轴空气光线状态 r=[y(m),θ(rad)]ᵀ；跨折射率边界时需使用对应折射矩阵，或改用 r=[y,nθ]ᵀ 的约定。',example:'一段 0.1 m 自由传播满足 y₂=y₁+0.1θ₁，θ₂=θ₁。'},
+    {id:'s-free-ray',course:'solid',stage:3,title:'自由空间传播矩阵',expression:`P(${eq('d','d')}) = [[1, ${eq('d','d')}], [0, 1]]`,symbols:[sym('d','d','从输入截面到输出截面的传播距离','m','空气中若 d=100 mm，矩阵上右元素为0.1 m')],note:'适用于同一均匀介质、近轴光线；此处以空气中的 y,θ 为状态变量。',example:'d=100 mm：P(d)=[[1,0.1],[0,1]]（长度单位统一采用 m）。'},
+    {id:'s-lens-ray',course:'solid',stage:3,title:'理想薄透镜矩阵',expression:`F(${eq('f','f')}) = [[1, 0], [−1/${eq('f','f')}, 1]]`,symbols:[sym('f','f','薄透镜焦距','m','会聚透镜 f>0，发散透镜 f<0')],note:'忽略厚透镜主平面、像差和孔径效应；采用空气中的 [y,θ]ᵀ 坐标。',example:'f=0.2 m 时 C=−5 m⁻¹。'},
+    {id:'s-mirror-ray',course:'solid',stage:3,title:'球面镜反射等效矩阵',expression:`M(${eq('R','R')}) = [[1, 0], [−2/${eq('R','R')}, 1]]`,symbols:[sym('R','R','球面镜曲率半径（采用反射后展开光路约定）','m','此约定下会聚凹面镜取 R>0')],note:'用反射后展开的局部传播坐标表示单次镜面反射；切向/弧矢方向和其他符号约定需分别处理。',example:'凹面镜 R=0.3 m 时 C≈−6.667 m⁻¹。'}
+  ];
+  for(const f of extra)if(!F.some(x=>x.id===f.id))F.push(f);
+  const $=(id)=>document.getElementById(id);
+  const set=(name,value)=>{const e=document.querySelector('#matrixLab [data-ml="'+name+'"]');if(e)e.textContent=value;};
+  const fmt=(x,dp=3)=>{let v=Number(x).toFixed(dp);return v.startsWith('-')?'−'+v.slice(1):v;};
+  function matrixUpdate(){if(!$ ('matrixLab'))return;
+    const d1=Number($('mlD1').value)/1000,d2=Number($('mlD2').value)/1000,f=Number($('mlF').value)/1000;
+    const y0=Number($('mlY0').value)/1000,t0=Number($('mlT0').value)/1000;
+    const yLens=y0+d1*t0,tLens=t0-yLens/f,yOut=yLens+d2*tLens;
+    const A=1-d2/f,B=d1+d2-d1*d2/f,C=-1/f,D=1-d1/f;
+    const yCheck=A*y0+B*t0,tCheck=C*y0+D*t0;
+    set('d1v',fmt(d1*1000,0)+' mm');set('d2v',fmt(d2*1000,0)+' mm');set('fv',fmt(f*1000,0)+' mm');set('y0v',fmt(y0*1000,1)+' mm');set('t0v',fmt(t0*1000,1)+' mrad');
+    set('A',fmt(A,4));set('B',fmt(B,4)+' m');set('C',fmt(C,4)+' m⁻¹');set('D',fmt(D,4));
+    set('yout',fmt(yOut*1000)+' mm');set('tout',fmt(tLens*1000)+' mrad');
+    set('step1','yₐ = y₀ + d₁θ₀ = '+fmt(yLens*1000)+' mm');
+    set('step2','θᵦ = θ₀ − yₐ/f = '+fmt(tLens*1000)+' mrad');
+    set('step3','y₂ = yₐ + d₂θᵦ = '+fmt(yOut*1000)+' mm');
+    set('verify',(Math.abs(yOut-yCheck)<1e-10&&Math.abs(tLens-tCheck)<1e-10)?'逐段计算 = 总矩阵计算 ✓':'请检查数值精度');
+    const max=Math.max(2.5,Math.abs(y0*1000),Math.abs(yLens*1000),Math.abs(yOut*1000))*1.12;
+    const yy=(mm)=>Math.max(35,Math.min(229,132-95*mm/max));
+    const pts=[[60,yy(y0*1000)],[376,yy(yLens*1000)],[700,yy(yOut*1000)]];
+    const svg=$('mlRay');if(svg)svg.setAttribute('points',pts.map(p=>p.join(',')).join(' '));
+    ['mlDotIn','mlDotAtLens','mlDotOut'].forEach((id,i)=>{const el=$(id);if(el){el.setAttribute('cx',pts[i][0]);el.setAttribute('cy',pts[i][1]);}});
+  }
+  document.addEventListener('input', e=>{if(e.target.closest('#matrixLab'))matrixUpdate()});
+  document.addEventListener('click', e=>{if(e.target.closest('[data-ml-reset]')){
+    for(const [id,v] of Object.entries({mlD1:100,mlF:200,mlD2:100,mlY0:1,mlT0:0})){const el=$(id);if(el)el.value=v;}matrixUpdate();
+  }});
+  const target=$('page');if(target)new MutationObserver(()=>{if($('matrixLab'))matrixUpdate()}).observe(target,{childList:true,subtree:false});
+  document.addEventListener('DOMContentLoaded',matrixUpdate,{once:true});
+})();
+  </script>
   <script>
 (() => {
   'use strict';
