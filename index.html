@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f5f7f5" />
-  <meta name="description" content="Laser Atlas v0.3.1：面向光学工程师的可交互激光技术学习平台。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
+  <meta name="description" content="Laser Atlas v0.3.2：面向光学工程师的可交互激光技术学习平台。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
   <meta property="og:title" content="Laser Atlas · 激光器设计学习平台" />
   <meta property="og:description" content="沿真实激光器设计流程系统学习。术语点按解释，公式字母可查可记。" />
   <title>Laser Atlas · 激光器设计学习平台 v0.3.1</title>
@@ -903,6 +903,97 @@ window.LASER_FORMULAS=[
 })();
 
   </script>
+
+<style>
+/* 2026-10-29 v0.3.2 — technical monograph layout; only the propagation-matrix topic is expanded. */
+.tech-page p{font-size:14px;line-height:2.08;color:#385549;margin:12px 0 15px}
+.tech-page .tech-assumption{margin:17px 0 21px;padding:17px 20px;border-left:3px solid #387d68;background:#f5faf7;border-radius:0 11px 11px 0}
+.tech-page .tech-assumption b{display:block;color:#245e4b;font-size:13px;margin-bottom:7px}
+.tech-page .tech-assumption p,.tech-page .tech-assumption li{margin:5px 0;color:#4a675c;font-size:13px;line-height:1.95}
+.tech-page .tech-assumption ul{padding-left:20px;margin:8px 0 3px}
+.tech-page .tech-equation{padding:12px 16px;border:1px solid #e1ece5;background:#fbfdfb;border-radius:12px;margin:12px 0 17px}
+.tech-page .tech-equation .matrix-math-scroll{margin:0;padding:4px 0 6px}
+.tech-page .tech-equation .math-under{margin:6px 0 0;font-size:12px;line-height:1.8}
+.tech-page .tech-steps{counter-reset:techcalc;list-style:none;margin:12px 0 20px;padding:0;display:grid;gap:10px}
+.tech-page .tech-steps li{border:1px solid #e4ede7;background:#fff;border-radius:11px;padding:12px 15px 12px 48px;position:relative;line-height:1.9;color:#466153}
+.tech-page .tech-steps li::before{counter-increment:techcalc;content:counter(techcalc, decimal-leading-zero);position:absolute;left:13px;top:12px;color:#247358;font-weight:800;font-size:12px}
+.tech-page .tech-result{background:#eef8f2;border:1px solid #cbe5d3;padding:17px;border-radius:13px;margin:18px 0}
+.tech-page .tech-result p{margin:7px 0}
+.tech-page .tech-inline{font-family:'Cambria Math', 'Times New Roman',serif;color:#1d7051;font-size:1.08em;white-space:normal}
+.tech-page .tech-figure{border:1px solid #e0eae5;padding:13px 14px 8px;border-radius:14px;background:#fff;margin:17px 0 21px}
+.tech-page .tech-figure svg{display:block;width:100%;height:auto;max-height:260px}
+.tech-page .tech-figure figcaption{font-size:12px;line-height:1.85;color:#6a8275;margin-top:10px}
+.tech-page .tech-source{display:flex;flex-wrap:wrap;gap:10px 20px;margin:12px 0 22px;padding:13px 16px;border:1px solid #d9e9e0;background:#f8fbf9;border-radius:11px;font-size:12px}
+.tech-page .tech-source a{color:#237d59;text-decoration:underline;text-underline-offset:3px}
+.tech-page .tech-sections-table{width:100%;border-collapse:collapse;font-size:13px;margin:13px 0 20px}
+.tech-page .tech-sections-table th,.tech-page .tech-sections-table td{border-bottom:1px solid #e0eae4;padding:10px;text-align:left;vertical-align:top;line-height:1.8}
+.tech-page .tech-sections-table th{font-size:12px;background:#f4f9f5;color:#33644e}
+.tech-page details.tech-check{border:1px solid #dbe9df;background:#fbfdfb;border-radius:12px;padding:12px 16px;margin:12px 0}
+.tech-page details.tech-check summary{color:#246b51;font-weight:650;cursor:pointer;line-height:1.7}
+.tech-page details.tech-check p{font-size:13px;margin:12px 0 4px}
+.tech-page .sq-mat{font-size:21px}.tech-page .matrix-math-eq{gap:10px;font-size:19px}
+.tech-page .math-frac{font-family:'Cambria Math','Times New Roman',serif}
+@media(max-width:560px){.tech-page p{font-size:13px;line-height:1.96}.tech-page .tech-assumption{padding:14px}.tech-page .tech-assumption p,.tech-page .tech-assumption li{font-size:12.6px}.tech-page .tech-equation{padding:10px}.tech-page .tech-equation .sq-mat{font-size:19px}.tech-page .tech-equation .matrix-math-eq{font-size:17px}.tech-page .tech-sections-table{font-size:11.7px}}
+</style>
+<script>
+(() => {
+  'use strict';
+  const M=(a,b,c,d)=>`<span class="sq-mat" role="math"><span class="sq-mat-grid"><span class="sq-cell">${a}</span><span class="sq-cell">${b}</span><span class="sq-cell">${c}</span><span class="sq-cell">${d}</span></span></span>`;
+  const V=(a,b)=>`<span class="sq-mat sq-mat-vec" role="math"><span class="sq-mat-grid"><span class="sq-cell">${a}</span><span class="sq-cell">${b}</span></span></span>`;
+  const E=(...items)=>`<div class="matrix-math-scroll"><div class="matrix-math-eq">${items.join('')}</div></div>`;
+  const D=(items,desc='')=>`<div class="tech-equation">${E(...items)}${desc?`<div class="math-under">${desc}</div>`:''}</div>`;
+  const F=(a,b)=>`<span class="math-frac"><span>${a}</span><span>${b}</span></span>`;
+  const T=(x)=>`<span class="tech-inline">${x}</span>`;
+  const P=(d)=>M('1',d,'0','1');
+  const Lens=(f)=>M('1','0',F('−1',f),'1');
+  const mirror=M('1','0',F('−2','R'),'1');
+  const sourceLinks=`<div class="tech-source"><span>推荐原始参考资料：</span><a href="https://www.rp-photonics.com/abcd_matrix.html" target="_blank" rel="noopener noreferrer">RP Photonics · ABCD Matrix</a><a href="https://ocw.mit.edu/courses/6-974-fundamentals-of-photonics-quantum-electronics-spring-2006/pages/lecture-notes/" target="_blank" rel="noopener noreferrer">MIT OCW · Gaussian Beams & Optical Resonators</a></div>`;
+
+  const figRay=`<figure class="tech-figure"><svg viewBox="0 0 820 248" role="img" aria-label="近轴光线在两个参考截面之间的高度与倾角定义"><defs><marker id="tRay032" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#167e5a"/></marker></defs><path d="M45 172H782" stroke="#a2b8ab" stroke-width="2" stroke-dasharray="6 6" fill="none"/><path d="M123 44V206M657 44V206" stroke="#a2b8ab" stroke-width="2" fill="none"/><path d="M123 130L657 68" stroke="#148a68" stroke-width="3.4" marker-end="url(#tRay032)" fill="none"/><path d="M123 172V130 M657 172V68" stroke="#c27749" stroke-width="3"/><path d="M152 130H235" stroke="#77a698" stroke-width="1.6" stroke-dasharray="4 3"/><path d="M209 130A59 59 0 0 0 208 120" stroke="#c27749" stroke-width="2" fill="none"/><path d="M158 211H630M158 205V218 M630 205V218" stroke="#6b9a85" stroke-width="1.6" fill="none"/><g font-size="17" fill="#2b6651"><text x="123" y="29" text-anchor="middle">输入面 S₁</text><text x="657" y="29" text-anchor="middle">输出面 S₂</text><text x="163" y="231" text-anchor="middle">z₁</text><text x="605" y="231" text-anchor="middle">z₂</text><text x="392" y="203" text-anchor="middle">d = z₂ − z₁</text><text x="78" y="122">y₁</text><text x="679" y="89">y₂</text><text x="201" y="108">θ₁</text></g><text x="46" y="190" fill="#698074" font-size="14">参考光轴（y = 0）</text></svg><figcaption>几何定义：两截面相距 d，光线在均匀介质中保持倾角 θ₁，截面高度差为 d·tanθ₁。图中横纵比例并不相同，示意角度不可按图量取。</figcaption></figure>`;
+
+  const figLens=`<figure class="tech-figure"><svg viewBox="0 0 820 234" role="img" aria-label="正薄透镜在高度 y处改变入射光线倾角"><defs><marker id="tLens032" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#147b59"/></marker></defs><path d="M45 165H783" stroke="#b0c2b7" stroke-width="2" stroke-dasharray="7 6"/><path d="M345 27Q363 116 345 211Q327 116 345 27" fill="#d7efe3" stroke="#548b73" stroke-width="2"/><path d="M85 90H345 L670 165" fill="none" stroke="#147b59" stroke-width="3.3" marker-end="url(#tLens032)"/><path d="M345 165V90" stroke="#bf855c" stroke-width="2.4"/><circle cx="670" cy="165" r="4" fill="#b97249"/><path d="M345 193H670 M345 189V198 M670 189V198" stroke="#6a9b83" stroke-width="1.8"/><g font-size="16" fill="#275f4c"><text x="230" y="68">θ⁻ = 0</text><text x="486" y="106">θ⁺ ≈ − y / f</text><text x="368" y="105">y</text><text x="509" y="213">焦距 f</text><text x="677" y="154">焦点</text><text x="356" y="23">理想正薄透镜</text></g></svg><figcaption>推导透镜矩阵只需要两个条件：薄透镜前后横向高度连续；平行入射、离轴高度 y 的光线在透镜后指向后焦点，因此产生 −y/f 的近轴角度变化。对任意入射倾角使用线性叠加。</figcaption></figure>`;
+
+  const figChain=`<figure class="tech-figure"><svg viewBox="0 0 820 236" role="img" aria-label="传播一百毫米、经过二百毫米焦距透镜、再传播一百毫米的定量光线示意"><path d="M45 171H780" stroke="#a8bdaf" stroke-width="2" stroke-dasharray="7 6"/><path d="M110 52V192 M405 44V192 M700 52V192" stroke="#b7cbbd" stroke-width="1.8" stroke-dasharray="5 5"/><path d="M405 47Q420 119 405 191Q390 119 405 47" fill="#d8efe2" stroke="#388463" stroke-width="2"/><path d="M110 90H405L700 130" fill="none" stroke="#147f5a" stroke-width="4"/><path d="M110 171V90 M405 171V90 M700 171V130" stroke="#ba7d52" stroke-width="2.5"/><path d="M125 212H395 M415 212H692 M125 206V218 M395 206V218 M415 206V218 M692 206V218" stroke="#679780" stroke-width="1.8"/><g font-size="16" fill="#285d47"><text x="110" y="35" text-anchor="middle">S₁</text><text x="405" y="35" text-anchor="middle">F(f)</text><text x="700" y="35" text-anchor="middle">S₂</text><text x="260" y="229" text-anchor="middle">d₁ = 100 mm</text><text x="552" y="229" text-anchor="middle">d₂ = 100 mm</text><text x="63" y="76">1 mm</text><text x="713" y="124">0.5 mm</text><text x="520" y="83">−5 mrad</text><text x="110" y="150">θ₁ = 0</text></g></svg><figcaption>与下方数值例题对应：输入光线高于光轴 1 mm、倾角为 0；通过焦距 200 mm 的正薄透镜后方向变为 −5 mrad，再传播 100 mm，输出高度降至 0.5 mm。图中光线斜率作了视觉放大。</figcaption></figure>`;
+
+  const r=(window.LASER_PRINCIPLES||[]).find(v=>v.id==='raymatrix');
+  if(r){
+    const preservedLab = r.sections.find(s=>s.body && s.body.includes('id="matrixLab"'));
+    r.sections=[
+      {title:'01 · 复习矩阵乘法：由线性方程组得到传输算子',body:`<div class="tech-page"><p>在光学中使用 ABCD 矩阵，首先需要明确其数学角色。它不是一种专门的光学定律，而是将一个具有两个输入变量、两个输出变量的<strong>线性映射</strong>写成紧凑的矩阵形式。设两个输出变量满足 y₂=Ay₁+Bθ₁、θ₂=Cy₁+Dθ₁，那么系数自然组成一个 2×2 方阵。</p>${D([M('A','B','C','D'),V('y₁','θ₁'),'<span>=</span>',V('Ay₁ + Bθ₁','Cy₁ + Dθ₁')],'第一行与输入列向量相乘得到输出高度；第二行得到输出倾角。这里不是把四个元素相加，而是每行与每列求内积。')}<p>用一组普通数字先核对乘法：取下面的系数矩阵与输入列向量。</p>${D([M('2','1','2','4'),V('3','2'),'<span>=</span>',V('8','14')],'第一行 2×3+1×2=8；第二行 2×3+4×2=14。')}<p>同样的方法用于光线传播时，数字系数被光学系统的几何参数取代。尤其要注意：矩阵乘法通常不可交换。先通过透镜再传播，与先传播再通过透镜，除特殊参数外不会给出相同结果。</p><div class="tech-assumption"><b>此处需要建立的数学约定</b><p>全文将光线状态写成<strong>列向量</strong>，采用左乘约定：r₂=M r₁。对连续光学段，第一段 M₁ 写在乘积最右侧，之后依次向左排列。列向量没有转置错误，才可能正确推导复合光路。</p></div></div>`},
+      {title:'02 · 近轴光线的状态变量及 ABCD 元素的物理量纲',body:`<div class="tech-page"><p>对轴对称系统或一个指定的子午截面，在任意参考面 S，一条光线由横向高度 y 和相对参考光轴的有符号倾角 θ 确定。高度可正可负；倾角采用弧度。定义：</p>${D(['<span>r(z)</span>','<span>=</span>',V('y(z)','θ(z)')],'对于二维近轴传播，给定 y 和 θ，就足以在后续理想元件间确定该条几何光线的轨迹。')}${figRay}<p>设光线在 S₁ 和 S₂ 的状态分别为 r₁ 和 r₂。近轴一阶光学下：</p>${D([V('y₂','θ₂'),'<span>=</span>',M('A','B','C','D'),V('y₁','θ₁')],'等价的两条标量方程：y₂=Ay₁+Bθ₁；θ₂=Cy₁+Dθ₁。')}<table class="tech-sections-table"><thead><tr><th>元素</th><th>对应的灵敏度</th><th>采用 y[m]、θ[rad] 时的单位</th></tr></thead><tbody><tr><td>A</td><td>∂y₂/∂y₁：初始高度对输出高度的贡献</td><td>1</td></tr><tr><td>B</td><td>∂y₂/∂θ₁：初始倾角对输出高度的贡献</td><td>m</td></tr><tr><td>C</td><td>∂θ₂/∂y₁：初始高度对输出倾角的贡献</td><td>m⁻¹</td></tr><tr><td>D</td><td>∂θ₂/∂θ₁：初始倾角对输出倾角的贡献</td><td>1</td></tr></tbody></table><div class="tech-assumption"><b>近轴近似及符号范围</b><p>要求 |θ|≪1 rad，可用 sinθ≈tanθ≈θ。矩阵处理的是一阶光线传输，并不自动包含球差、彗差、高阶热畸变或非线性频率转换。这里的 y 是<strong>单条光线的有符号位置</strong>，不是高斯光束 1/e² 半径 w；这两个量在后文必须分清。</p></div></div>`},
+      {title:'03 · 自由传播矩阵：从几何关系逐项推出四个元素',body:`<div class="tech-page"><p>先考虑同一种均匀介质中的一段长度 d，不含透镜和界面。若一条光线在 S₁ 的高度为 y₁、倾角为 θ₁，则传播到 S₂ 后，高度由几何关系给出：</p><div class="tech-result"><p>${T('y₂ = y₁ + d · tanθ₁')}</p><p>在近轴条件下：${T('y₂ ≈ y₁ + dθ₁')}；均匀介质不改变光线方向，故 ${T('θ₂ = θ₁')}。</p></div>${figRay}<p>为了从方程反求 ABCD 元素，将它们逐项与 y₂=Ay₁+Bθ₁、θ₂=Cy₁+Dθ₁ 比较：</p><ol class="tech-steps"><li>在 y₂ 方程中，y₁ 的系数为 1，因此 A=1。</li><li>θ₁ 前的系数为 d，因此 B=d；B 具有长度量纲。</li><li>θ₂ 与输入高度 y₁ 无关，因此 C=0。</li><li>θ₂ 完全等于 θ₁，因此 D=1。</li></ol>${D(['<span>P(d)</span>','<span>=</span>',P('d')],'自由传播矩阵；单位一致时可直接连乘。')}<p>数值检验：输入 y₁=1 mm、θ₁=2 mrad，传播 d=100 mm 后，输出为 y₂=1 mm+100 mm×0.002=1.2 mm；θ₂=2 mrad。注意不要把 2 mrad 当成数字 2 直接代入。</p></div>`},
+      {title:'04 · 薄透镜矩阵：从焦点几何关系推导角度变化',body:`<div class="tech-page"><p>将透镜厚度忽略，仅把它视为某一参考面上的折射元件。近轴薄透镜的假设意味着光线过透镜时高度连续，即 y⁺=y⁻。此处采用会聚透镜 f&gt;0 的约定。</p>${figLens}<p>考虑一条平行入射光线：θ⁻=0、入射高度 y。它经正透镜折射后指向距离 f 的后焦点，因此小角近似下 θ⁺≈−y/f。对于任意原本就有倾角 θ⁻ 的光线，由一阶光学的线性叠加得到：</p>${D([V('y⁺','θ⁺'),'<span>=</span>',V('y⁻','θ⁻ − y⁻ / f')],'上式显式说明：薄透镜只使方向增加一个与入射高度成比例的偏转量。')}<p>与 ABCD 形式逐项比较，A=1、B=0、C=−1/f、D=1。因此：</p>${D(['<span>F(f)</span>','<span>=</span>',Lens('f')],'负焦距 f&lt;0 表示发散透镜；在此符号约定下 C 自动变为正值。')}<p>这类矩阵在固体激光谐振腔中还常用于<strong>等效热透镜</strong>。但真实 Nd:YVO₄ 的热透镜可能沿两个横向方向不同，并且随泵浦条件变化；将其视为理想薄透镜只是首轮设计近似。</p></div>`},
+      {title:'05 · 球面腔镜：为什么是 −2/R 而不是 −1/R？',body:`<div class="tech-page"><p>曲面镜的近轴聚焦能力来自反射定律：入射角等于反射角，反射方向相对局部法线具有两倍的角度变化。对近轴球面镜，位于高度 y 处的法线相对光轴偏转近似 y/R，所以在<strong>反射光路展开后的局部正向传播坐标</strong>中：</p><div class="tech-result"><p>${T('y⁺ = y⁻')}</p><p>${T('θ⁺ = θ⁻ − 2y⁻ / R')}</p></div>${D(['<span>M(R)</span>','<span>=</span>',mirror],'本文约定 R&gt;0 对应会聚凹面腔镜；平面镜为 R→∞，其矩阵趋于单位阵。')}<p>对比薄透镜矩阵可看出：曲面镜的近轴等效焦距 fₘ=R/2，这就是系数中出现 2 的原因。反射改变了真实传播方向，因此必须使用一致的局部参考轴或展开光路；不能在固定全局 z 方向下不加处理地套用这个矩阵。</p><p>若折叠镜以入射角 α 斜入射，球面反射的等效曲率还可能在切向、弧矢方向不同：Rₜ=Rcosα、Rₛ=R/cosα。后续三镜折叠腔设计应分别求两轴的往返矩阵，而不是仅用一套矩阵计算光斑圆度。</p></div>`},
+      {title:'06 · 复合光路：矩阵顺序和显式连乘推导',body:`<div class="tech-page"><p>设光线先经过 d₁ 的自由传播，再通过焦距 f 的薄透镜，最后再传播 d₂。状态向量的变化按真实先后顺序为：</p><ol class="tech-steps"><li>r₁′=P(d₁)r₁。</li><li>r₂′=F(f)r₁′=F(f)P(d₁)r₁。</li><li>r_out=P(d₂)r₂′=P(d₂)F(f)P(d₁)r₁。</li></ol>${D(['<span>M<sub>total</sub></span>','<span>=</span>',P('d₂'),Lens('f'),P('d₁')],'列向量从最右侧开始依次受作用；不能将三个矩阵按光线经过的顺序从左到右直接相乘。')}<p>先计算中间两项：</p>${D(['<span>F(f) P(d₁)</span>','<span>=</span>',M('1','d₁',F('−1','f'),`1 − ${F('d₁','f')}`)],'这里下排右侧 D=1−d₁/f，是透镜前自由传播导致的结果。')}<p>再左乘 P(d₂)，最终得到：</p>${D(['<span>M<sub>total</sub></span>','<span>=</span>',M(`1 − ${F('d₂','f')}`,`d₁ + d₂ − ${F('d₁ d₂','f')}`,F('−1','f'),`1 − ${F('d₁','f')}`)],'A=1−d₂/f；B=d₁+d₂−d₁d₂/f；C=−1/f；D=1−d₁/f。')}<p>由此可以直接看出，透镜之前和之后的传播距离分别影响不同矩阵元；将 d₁ 与 d₂ 交换时，通常 A 与 D 也随之互换。</p><div class="tech-assumption"><b>工程核对：矩阵行列式</b><p>自由传播矩阵、薄透镜矩阵以及在同一介质中按上述约定建立的球面镜矩阵，都满足 det(M)=AD−BC=1。因此其乘积也满足 det(M_total)=1。对于不满足这个结果的手工计算，应首先检查矩阵乘法、长度单位和符号约定；跨折射率界面时例外将在后文解释。</p></div></div>`},
+      {title:'07 · 完整数值算例：逐段计算与总矩阵交叉验证',body:`<div class="tech-page"><p>取 d₁=d₂=100 mm、f=200 mm，输入光线 y₁=1 mm、θ₁=0 rad。所有距离暂时统一使用 mm，则系数 C 应采用 mm⁻¹。</p>${figChain}${D(['<span>M<sub>total</sub></span>','<span>=</span>',M('0.5','150 mm','−0.005 mm⁻¹','0.5')],'代入 A=1−100/200=0.5；B=100+100−(100×100/200)=150 mm；C=−1/200 mm⁻¹。')}<p>将输入状态代入总矩阵：</p>${D([V('y_out','θ_out'),'<span>=</span>',M('0.5','150 mm','−0.005 mm⁻¹','0.5'),V('1 mm','0 rad'),'<span>=</span>',V('0.5 mm','−5 mrad')],'检验量纲：Bθ 的单位是长度；Cy 的单位是弧度。')}<p>再使用逐段传播法，作为独立验证：</p><ol class="tech-steps"><li>第一段自由传播：y=1 mm+100 mm×0=1 mm，θ=0。</li><li>通过透镜：y=1 mm，θ=0−1/200=−0.005 rad=−5 mrad。</li><li>第二段自由传播：y_out=1 mm+100 mm×(−0.005)=0.5 mm；θ_out=−5 mrad。</li></ol><div class="tech-result"><p><strong>逐段计算与矩阵连乘给出完全一致的结果。</strong> 把这组参数放进下方交互实验，然后改变 d₁、d₂ 或 f，观察 A、B、C、D 与输出状态如何改变。</p></div></div>`},
+      {title:'08 · 进入晶体介质：必须分清 θ 和 nθ 两种状态向量',body:`<div class="tech-page"><p>实际 Nd:YVO₄ 谐振腔中不只有空气，还有增益晶体和可能的其他透明光学材料。进入折射率 n 的介质时，如果沿用 r=[y,θ]ᵀ，几何厚度为 d 的均匀介质内部依旧使用 P(d)；但在不同折射率之间的平面界面，近轴斯涅尔定律 n₁θ₁=n₂θ₂ 导致：</p>${D(['<span>I₁₂</span>','<span>=</span>',M('1','0','0',F('n₁','n₂'))],'这是以 [y, θ]ᵀ 为状态变量、且以界面法线为同一参考轴的平面折射界面矩阵。')}<p>另一种常见且在激光腔设计中更方便的约定是使用<strong>约化角</strong> u=nθ，定义 r̃=[y,nθ]ᵀ。此时平面界面的传输矩阵可写成单位阵，而在折射率 n 的均匀介质中传播厚度 d 对应：</p>${D(['<span>P̃(d,n)</span>','<span>=</span>',M('1',F('d','n'),'0','1')],'注意右上元素变成 d/n，是因为状态向量的第二分量已改为 nθ；不能把两种约定混用。')}<table class="tech-sections-table"><thead><tr><th>选择的状态向量</th><th>介质中传播 d</th><th>平面 n₁→n₂ 界面</th></tr></thead><tbody><tr><td>[y, θ]ᵀ</td><td>右上 B=d</td><td>D=n₁/n₂</td></tr><tr><td>[y, nθ]ᵀ</td><td>右上 B=d/n</td><td>单位阵</td></tr></tbody></table><p>如果系统的输入、输出参考面位于同一折射率下，第一种约定的总矩阵通常满足 det(M)=1；若输入、输出介质不同，则 det(M)=n_in/n_out。约化角约定中的理想一阶系统通常保持 det(M)=1。这一点可以作为实际晶体布局建模的验算工具。</p></div>`},
+      {title:'09 · 从光线 ABCD 转入高斯光束 q 参数和谐振腔稳定性',body:`<div class="tech-page"><p>前面推导的 r=[y,θ]ᵀ 用于追迹<strong>单条几何光线</strong>，并不能直接给出 TEM₀₀ 光束半径。对于满足近轴标量高斯光束假设的光场，可以引入复光束参数 q，把波前曲率半径 R_w 与光斑半径 w 组合在一起：</p><div class="tech-result"><p>${T('1/q = 1/R_w − i λ₀/(π n w²)')}</p><p>其中 λ₀ 是真空波长、n 是均匀介质折射率、w 是 1/e² 强度半径；R_w 是<strong>光束波前</strong>曲率半径，不要和腔镜曲率半径 R_m 混淆。</p></div><p>当 ABCD 描述同一均匀介质内的近轴光学系统时，q 遵循分式线性变换：</p>${D(['<span>q₂</span>','<span>=</span>',F('Aq₁ + B','Cq₁ + D')],'也称 ABCD law；需要在介质界面保持所选光线坐标与 q 的定义一致。')}<p>对驻波谐振腔，从某个选定截面出发，沿物理光路走过一个完整往返再回到同一截面，其矩阵记为 M_rt。稳定高斯腔模在往返后应复现相同 q：</p>${D(['<span>q</span>','<span>=</span>',F('Aq + B','Cq + D')], '两边交叉相乘，得到 Cq²+(D−A)q−B=0。选取符合物理波束条件的复数根。')}<p>对 det(M_rt)=1 的无损近轴一阶模型，常用非临界稳定性条件为 |(A+D)/2|&lt;1；在稳定区边界附近，热透镜、装调误差和镜片曲率公差会显著影响设计裕量。</p><p><strong>理想平凹腔交叉验证：</strong>取 λ₀=1064 nm、L=120 mm、凹面镜 R_m=300 mm，平面端镜为另一端镜。选平面镜处为往返参考面、按展开反射坐标计算，可得：</p>${D(['<span>M_rt</span>','<span>=</span>',M('0.2','0.144 m','−6.667 m⁻¹','0.2')],'往返追迹 P(L)·M(R_m)·P(L)；tr(M_rt)/2=0.2，所以理想腔位于稳定区内部。')}<p>代入自洽条件可得平面镜处 q≈i·0.147 m，即瑞利长度 z_R≈147 mm。由 z_R=πw₀²/λ₀ 得 w₀≈223 μm。这一步完成了从<strong>机械腔长与曲率</strong>到<strong>高斯腔模尺寸</strong>的转换。</p></div>`},
+      {title:'10 · 实际 355 nm 三镜腔中的建模顺序和适用边界',body:`<div class="tech-page"><p>将前面方法迁移到三镜折叠式 355 nm 固体激光器时，可先单独分析 1064 nm 基频谐振腔：M1 → Nd:YVO₄ → AOM → M2 → 非线性晶体区 → M3，再沿返回路径回到初始参考面。这条路径包含透射和反射元件，不等于“几何长度相加”的一段自由传播。</p><ol class="tech-steps"><li>指定 M1 附近一个固定参考面，确定所有光线段长度与折射率，并记录 M1、M2、M3 的曲率及入射角。</li><li>明确 [y,θ] 或 [y,nθ] 约定，在 Nd:YVO₄/空气界面使用相匹配的传输矩阵，不能混搭。</li><li>对泵浦工况建立 Nd:YVO₄ 的等效热透镜范围；对曲面折叠镜分别建立切向和弧矢矩阵。</li><li>沿真实往返顺序相乘，求稳定区、自洽 q 以及增益晶体、AOM、SHG、SFG 所在面的 w(z)。</li><li>再与泵浦模式匹配、AOM 通光孔径和两块 LBO 的转换/损伤约束联合分析。ABCD 仅给出一阶腔模信息，不能单独预测 355 nm 输出功率、脉宽或损伤阈值。</li></ol><div class="tech-assumption"><b>针对实际设计的限制</b><p>矩阵法不自动计算 Nd:YVO₄ 热致像差、AOM 动态损耗、LBO 的相位匹配和空间走离、非线性三波耦合、M²&gt;1 的复杂模式以及机械装调公差的统计分布。它应是腔体与模式设计的第一层模型，而不是整机性能验证的替代品。</p></div>${sourceLinks}<p><a class="text-link" href="#/lesson/solid-03">返回本节设计主线 →</a>　<a class="text-link" href="#/lesson/solid-04">衔接三镜折叠腔 →</a>　<a class="text-link" href="#/formulas/solid">查看公式符号手册 →</a></p></div>`},
+      {title:'11 · 自检与推导练习（含详细答案）',body:`<div class="tech-page"><p>下面的练习不依赖软件模拟，建议先写出输入、输出状态，再独立完成矩阵推导。两道题涉及工程中最常见的量纲和顺序错误。</p><details class="tech-check"><summary>练习 A：y₁=1 mm、θ₁=2 mrad，在空气中传播 d=150 mm，输出状态是什么？</summary><p>由 P(d) 可得 y₂=1 mm+150 mm×0.002=1.3 mm；θ₂=2 mrad。若把 θ₁ 当成 2 rad，会得到不可能的 301 mm，这是典型单位错误。</p></details><details class="tech-check"><summary>练习 B：证明 P(d₂)F(f)P(d₁) 的行列式等于 1。</summary><p>由 A=1−d₂/f、B=d₁+d₂−d₁d₂/f、C=−1/f、D=1−d₁/f，有 AD−BC=(1−d₂/f)(1−d₁/f)+(d₁+d₂−d₁d₂/f)/f=1。</p></details><details class="tech-check"><summary>练习 C：为什么 Nd:YVO₄ 晶体中的 d/n 不能不经解释就代入自由传播矩阵？</summary><p>因为在 r=[y,θ]ᵀ 的角度坐标中，均匀介质传播 B=d；只有改为 r̃=[y,nθ]ᵀ 的约化角坐标后，传播矩阵的 B 才是 d/n，并且平面折射界面矩阵同步改变。混用会破坏真实光线的折射关系与量纲一致性。</p></details><p>将前述数值例题带入网页交互实验，分别改变焦距 f 和传播距离 d₁、d₂，验证你预测的矩阵元变化是否成立。掌握本专题之后，再进入热透镜变化范围下的谐振腔自洽 q 求解。</p></div>`}
+    ];
+    if(preservedLab){
+      r.sections.splice(7,0,{title:'08 · 交互实验：从输入光线到输出光线',body:preservedLab.body});
+      r.sections.forEach((section,i)=>{section.title=section.title.replace(/^\d+\s*·/,String(i+1).padStart(2,'0')+' ·');});
+    }
+    r.subtitle='几何光线传输的严格推导、矩阵连乘、介质坐标、q 参数与固体激光腔工程应用';
+  }
+
+  const solid=(window.LASER_COURSES||[]).find(c=>c.id==='solid');
+  const course=solid?.lessons?.find(l=>l.id==='solid-03');
+  if(course){
+    // Do not rewrite the course overview or adjacent lessons; this one section is the gateway to the full technical chapter.
+    const s=course.sections.find(k=>/光线传播矩阵|传播矩阵原理/.test(k.title));
+    if(s){
+      s.title='ABCD 传播矩阵：从基础推导到实际光路计算';
+      s.body=`<p>要将 1064 nm 谐振腔中的元件位置变成可计算的设计参数，必须先掌握近轴传输矩阵。对于输入状态 <span class="formula-inline">[y₁,θ₁]ᵀ</span>，定义输出状态 <span class="formula-inline">[y₂,θ₂]ᵀ</span>，两者具有线性关系：</p>${D([V('y₂','θ₂'),'<span>=</span>',M('A','B','C','D'),V('y₁','θ₁')],'其中 A、D 无量纲；B 的单位为长度，C 的单位为长度的倒数。')}<p>这里不是先记忆四个元素，而是由自由传播的 y₂=y₁+dθ₁、θ₂=θ₁，以及薄透镜的 y₂=y₁、θ₂=θ₁−y₁/f，逐项对照得到对应的矩阵。将元件按真实顺序连乘后，才能进一步讨论腔镜曲率、热透镜以及晶体中的光束传播。</p>${D(['<span>P(d)</span>','<span>=</span>',P('d'),'<span>　</span>','<span>F(f)</span>','<span>=</span>',Lens('f')],'左侧是均匀介质中的自由传播；右侧是焦距 f 的理想薄透镜。')}<p><a class="text-link" href="#/principle/raymatrix">进入专题原理：完整推导、物理假设、三镜腔实例与习题 →</a>。详细专题保留图解和交互计算器，并补充两种折射率坐标约定的差别。</p>`;
+    }
+  }
+
+  // Symbol handbooks continue to use the original interactive symbol definitions.
+  const terms=window.LASER_TERMS||[];
+  if(!terms.some(t=>t.id==='reduced-angle'))terms.push({id:'reduced-angle',course:'solid',name:'约化角 nθ',short:'一阶光学中将光线倾角乘以折射率作为状态变量，常记 u=nθ。',detail:'采用 [y,nθ]ᵀ 时，在均匀折射率为 n 的晶体内传播几何厚度 d，其传播矩阵右上元素为 d/n，而不再是 d。',application:'用于 Nd:YVO₄ 等晶体及界面较多的折叠谐振腔建模；不能与 [y,θ]ᵀ 的矩阵约定混用。',aliases:['约化角'],principle:'raymatrix'});
+})();
+</script>
   <script>
 (() => {
   'use strict';
