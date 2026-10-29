@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f5f7f5" />
-  <meta name="description" content="Laser Atlas v0.3.0：面向光学工程师的可交互激光技术学习平台。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
+  <meta name="description" content="Laser Atlas v0.3.1：面向光学工程师的可交互激光技术学习平台。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
   <meta property="og:title" content="Laser Atlas · 激光器设计学习平台" />
   <meta property="og:description" content="沿真实激光器设计流程系统学习。术语点按解释，公式字母可查可记。" />
-  <title>Laser Atlas · 激光器设计学习平台 v0.3.0</title>
+  <title>Laser Atlas · 激光器设计学习平台 v0.3.1</title>
   <style>
 :root{--bg:#f5f7f5;--surface:#fff;--ink:#152b28;--muted:#76837f;--muted2:#9da9a5;--border:#e3eae6;--brand:#123a35;--green:#138461;--green-bright:#30ba8c;--highlight:#edf7f2;--shadow:0 12px 40px rgba(25,55,45,.04);--sidebar:#12322e;--radius:19px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased;line-height:1.65}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible, [tabindex]:focus-visible{outline:3px solid #57c9a6;outline-offset:2px}a{text-decoration:none;color:inherit}p{margin:0 0 13px}h1,h2,h3,h4{letter-spacing:-.025em;line-height:1.35;margin:0;color:var(--ink)}h1{font-size:36px;font-weight:740}h2{font-size:26px}h3{font-size:18px}small{font-size:12px}strong{font-weight:700}svg{display:block}::selection{background:#aeead2;color:#12322e}
@@ -87,7 +87,7 @@ body.is-teaching .sidebar,body.is-teaching .topbar,body.is-teaching .mobile-bott
         </div>
       </header>
       <main class="page-content" id="page" tabindex="-1"></main>
-      <footer class="app-footer"><span>LASER ATLAS · v0.3.0（2026-10-29） · 学习是理解设计决策，而不只是得到结果</span><span>所有计算工具均为教学近似，不代替工程验证</span></footer>
+      <footer class="app-footer"><span>LASER ATLAS · v0.3.1（2026-10-29） · 学习是理解设计决策，而不只是得到结果</span><span>所有计算工具均为教学近似，不代替工程验证</span></footer>
     </div>
     <nav class="mobile-bottom" aria-label="手机快捷导航"><a href="#/home"><span>⌂</span>首页</a><a href="#/course/solid"><span>◈</span>设计课</a><a href="#/formulas/solid"><span>ƒ</span>公式</a><a href="#/notes"><span>▧</span>笔记</a></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -769,6 +769,139 @@ window.LASER_FORMULAS=[
   const target=$('page');if(target)new MutationObserver(()=>{if($('matrixLab'))matrixUpdate()}).observe(target,{childList:true,subtree:false});
   document.addEventListener('DOMContentLoaded',matrixUpdate,{once:true});
 })();
+  </script>
+  <style>
+
+/* v0.3.1: genuine two-dimensional mathematical typography for optical ray matrices. */
+.matrix-math-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding:8px 3px 10px;margin:12px 0;-webkit-overflow-scrolling:touch;scrollbar-color:#c9dcd0 transparent}
+.matrix-math-eq{width:max-content;max-width:none;min-width:min-content;display:flex;align-items:center;gap:12px;font-family:'Cambria Math','STIX Two Math','Times New Roman',serif;color:#224b3b;font-size:22px;white-space:nowrap}
+.matrix-math-eq .math-id{font-size:.78em;font-family:inherit;color:#3c6955;font-weight:600}
+.sq-mat{display:inline-block;position:relative;vertical-align:middle;isolation:isolate;padding:8px 12px;font-family:'Cambria Math','STIX Two Math','Times New Roman',serif;color:#243e38;font-size:23px;line-height:1.3;font-weight:500;white-space:nowrap;flex-shrink:0}
+.sq-mat::before,.sq-mat::after{content:'';position:absolute;top:3px;bottom:3px;width:7px;border-color:currentColor;border-style:solid;opacity:.88}
+.sq-mat::before{left:0;border-width:2px 0 2px 2px}.sq-mat::after{right:0;border-width:2px 2px 2px 0}
+.sq-mat-grid{display:grid;grid-template-columns:repeat(2,minmax(40px,max-content));grid-template-rows:repeat(2,minmax(28px,auto));gap:3px 12px;place-items:center}
+.sq-mat-vec .sq-mat-grid{grid-template-columns:minmax(36px,max-content);grid-template-rows:repeat(2,minmax(28px,auto))}
+.sq-cell{min-width:26px;text-align:center;display:flex;align-items:center;justify-content:center}
+.sq-mat-compact{padding:5px 9px;font-size:19px}.sq-mat-compact .sq-mat-grid{grid-template-columns:repeat(2,minmax(27px,max-content));grid-template-rows:repeat(2,minmax(23px,auto));gap:1px 7px}.sq-mat-vec.sq-mat-compact .sq-mat-grid{grid-template-columns:minmax(25px,max-content)}.sq-mat-compact::before,.sq-mat-compact::after{width:5px;top:1px;bottom:1px}
+.sq-mat-symbol{font-size:20px}.math-given{font-family:inherit;font-size:17px}.math-matrix-eq-inline{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;max-width:100%;font-size:17px}
+.math-matrix-display{padding:15px 15px 12px;border:1px solid #e3ebe5;border-radius:15px;background:#fbfdfb;margin:14px 0 18px;max-width:100%}
+.math-matrix-display .matrix-math-scroll{margin:0;padding:2px 0}
+.math-note,.math-under{font-size:12px;line-height:1.7;color:#73867a;margin:8px 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
+.math-under{font-size:13px;color:#4d7160}
+.math-explain{padding:13px 16px;border-left:3px solid #6fac91;border-radius:5px;margin:14px 0 20px;background:#f6f9f6;color:#426759;line-height:1.85;font-size:13px}
+.math-two-column{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:15px 0}
+.math-theory-card{border:1px solid #e1e9e2;border-radius:14px;padding:15px;background:#fff;min-width:0}
+.math-theory-card h3{font-size:14px;color:#2f634a;margin:0 0 10px;font-weight:750}.math-theory-card p{color:#5b7364;font-size:12px;line-height:1.8;margin:8px 0 0}
+.math-theory-card .matrix-math-scroll{margin:8px 0 4px}
+.math-step-formula{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:18px;font-family:'Cambria Math','Times New Roman',serif;margin:8px 0;color:#28513b}
+.math-frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;justify-content:center;font-size:.86em;line-height:1.1}.math-frac>span:first-child{padding:0 4px 2px;border-bottom:1px solid currentColor}.math-frac>span:last-child{padding:2px 3px 0}
+.math-ray-svg{display:block;width:100%;height:auto;max-height:270px}
+.math-figure{padding:10px;background:#fff;border:1px solid #e2eae5;border-radius:15px;margin:13px 0 18px}
+.math-figure-caption{font-size:11.5px;color:#728679;padding:7px 5px 2px;line-height:1.7}
+.math-lab-showcase{border:1px solid #dceae0;background:white;border-radius:14px;padding:16px;margin:14px 0}
+.math-lab-showcase h4{font-size:12px;color:#56806a;margin:0 0 6px}
+.math-lab-showcase .sq-mat{font-size:22px}
+.math-lab-showcase .sq-mat-grid{grid-template-columns:repeat(2,minmax(68px,max-content));gap:5px 14px}
+.math-lab-showcase .sq-mat-vec .sq-mat-grid{grid-template-columns:minmax(68px,max-content)}
+.math-lab-output{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid #e5eee8;margin-top:13px;padding-top:13px}
+.math-lab-output .matrix-math-scroll{margin:0}
+.math-lab-output .sq-mat{font-size:19px}.math-lab-output .sq-mat-vec .sq-mat-grid{grid-template-columns:minmax(68px,max-content)}
+.math-lab-order{font-size:14px;font-family:'Cambria Math','Times New Roman',serif;color:#436e55;letter-spacing:.01em}
+.math-display-overflow .matrix-math-scroll{margin:0}
+.formula-expression .matrix-math-eq{font-size:20px}.formula-expression .sq-mat{font-size:21px}
+.formula-expression .sq-mat-grid{grid-template-columns:repeat(2,minmax(43px,max-content))}.formula-expression .sq-mat-vec .sq-mat-grid{grid-template-columns:minmax(32px,max-content)}
+.formula-expression .eq-symbol{border-bottom:1px dashed #90bd9e;cursor:pointer}
+.lesson-body .formula .sq-mat{font-size:20px}
+@media(max-width:730px){.math-two-column{grid-template-columns:1fr}.matrix-math-eq{gap:8px;font-size:19px}.sq-mat{padding:7px 10px;font-size:20px}.sq-mat-grid{grid-template-columns:repeat(2,minmax(33px,max-content));gap:3px 7px}.sq-mat-vec .sq-mat-grid{grid-template-columns:minmax(31px,max-content)}.sq-mat-compact{padding:4px 8px;font-size:17px}.sq-mat-compact .sq-mat-grid{grid-template-columns:repeat(2,minmax(23px,max-content));gap:2px 6px}.sq-mat-vec.sq-mat-compact .sq-mat-grid{grid-template-columns:minmax(22px,max-content)}.math-matrix-display{padding:10px}.math-theory-card{padding:12px}.math-lab-showcase{padding:12px}.math-lab-showcase .sq-mat-grid{grid-template-columns:repeat(2,minmax(46px,max-content));gap:3px 8px}.math-lab-showcase .sq-mat{font-size:18px}.math-lab-output .sq-mat{font-size:17px}.math-lab-order{font-size:12px}}
+
+  </style>
+  <script>
+
+(() => {
+  'use strict';
+  // An offline-safe semantic matrix renderer: CSS keeps rows/columns and square brackets in every lesson.
+  const cell=x=>`<span class="sq-cell">${x}</span>`;
+  const M=(a,b,c,d,compact=false,label='2×2 传播矩阵')=>`<span class="sq-mat ${compact?'sq-mat-compact':''}" role="math" aria-label="${label}"><span class="sq-mat-grid">${[a,b,c,d].map(cell).join('')}</span></span>`;
+  const V=(a,b,compact=false,label='两行列向量')=>`<span class="sq-mat sq-mat-vec ${compact?'sq-mat-compact':''}" role="math" aria-label="${label}"><span class="sq-mat-grid">${[a,b].map(cell).join('')}</span></span>`;
+  const E=(...children)=>`<div class="matrix-math-scroll"><div class="matrix-math-eq">${children.join('')}</div></div>`;
+  const B=(formula,desc='')=>`<div class="math-matrix-display">${formula}${desc?`<div class="math-under">${desc}</div>`:''}</div>`;
+  const Fr=(n,d)=>`<span class="math-frac"><span>${n}</span><span>${d}</span></span>`;
+  const S=(key,lab)=>`<span class="eq-symbol" role="button" tabindex="0" data-sym="${key}" aria-label="查看 ${key} 的物理含义">${lab}</span>`;
+  const example=M('1','2','3','4',false,'示例矩阵，第一行一二，第二行三四');
+  const demoFig=`<figure class="math-figure"><svg viewBox="0 0 700 235" class="math-ray-svg" role="img" aria-label="光线从左侧输入，经过距离 d 后，在右侧具有不同高度；高度和角度定义"><defs><marker id="rayArrow031" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6 Z" fill="#1b8263"/></marker></defs><line x1="40" y1="150" x2="655" y2="150" stroke="#9dbbb0" stroke-width="2" stroke-dasharray="8 7"/><text x="42" y="168" fill="#668377" font-size="13">光轴（y = 0）</text><line x1="110" y1="42" x2="110" y2="200" stroke="#a4c0ae" stroke-width="2"/><line x1="572" y1="42" x2="572" y2="200" stroke="#a4c0ae" stroke-width="2"/><path d="M110 111 L572 65" stroke="#168568" stroke-width="4" fill="none" marker-end="url(#rayArrow031)"/><path d="M110 150 L110 111 M572 150 L572 65" stroke="#d1844e" stroke-width="3"/><path d="M130 111 L163 111 M132 111 A38 38 0 0 0 165 108" fill="none" stroke="#e1a17a" stroke-width="2"/><text x="132" y="89" fill="#c3744a" font-size="18">θ₁</text><text x="69" y="106" fill="#b56a42" font-size="18">y₁</text><text x="586" y="72" fill="#b56a42" font-size="18">y₂</text><path d="M155 192 H523 M155 186 V198 M523 186 V198" fill="none" stroke="#487565" stroke-width="2"/><text x="336" y="187" text-anchor="middle" font-size="17" fill="#3c6c54">传播距离 d</text><text x="110" y="26" text-anchor="middle" font-size="14" fill="#567969">输入截面</text><text x="572" y="26" text-anchor="middle" font-size="14" fill="#567969">输出截面</text></svg><figcaption class="math-figure-caption">光线在自由空间中保持方向不变；由于有倾角 θ₁，传播距离越长，高度变化越大。图形未按数值比例绘制。</figcaption></figure>`;
+  const lensFig=`<figure class="math-figure"><svg viewBox="0 0 700 195" class="math-ray-svg" role="img" aria-label="正薄透镜让高于光轴的平行入射光折向焦点"><line x1="38" y1="128" x2="655" y2="128" stroke="#9fb9b0" stroke-width="2" stroke-dasharray="7 6"/><path d="M330 28 Q343 92 330 169 Q317 92 330 28" fill="#b7ddd2" stroke="#418e79" stroke-width="2"/><path d="M58 61 H330 L548 128" stroke="#19876b" stroke-width="4" fill="none"/><path d="M58 181 H330 L548 128" stroke="#d88a58" stroke-width="4" fill="none" opacity=".78"/><circle cx="548" cy="128" r="5" fill="#cc7d4e"/><text x="559" y="122" fill="#b87046" font-size="17">焦点 F</text><text x="251" y="22" fill="#38856a" font-size="17">薄透镜</text><text x="75" y="45" fill="#397260" font-size="15">入射平行光</text><text x="365" y="52" fill="#397260" font-size="15">出射光改变倾角</text></svg><figcaption class="math-figure-caption">会聚透镜将偏离光轴的光线朝光轴折转；理想薄透镜模型认为穿过透镜瞬间的高度不变。</figcaption></figure>`;
+  const formulaMini=`<div class="math-two-column"><div class="math-theory-card"><h3>自由空间传播</h3>${E('<span>P(d)</span>','<span>=</span>',M('1','d','0','1'))}<p>第一行：y₂ = y₁ + dθ₁；第二行：θ₂ = θ₁。</p></div><div class="math-theory-card"><h3>薄透镜 / 热透镜</h3>${E('<span>F(f)</span>','<span>=</span>',M('1','0',Fr('−1','f'),'1'))}<p>第一行：y₂ = y₁；第二行：θ₂ = θ₁ − y₁/f。</p></div><div class="math-theory-card"><h3>球面镜反射（展开光路）</h3>${E('<span>M(R)</span>','<span>=</span>',M('1','0',Fr('−2','R'),'1'))}<p>在这里采用凹面镜 R &gt; 0 的反射后展开坐标约定。</p></div><div class="math-theory-card"><h3>任意一段近轴系统</h3>${E('<span>M</span>','<span>=</span>',M('A','B','C','D'))}<p>A、D 无量纲；B 的单位是 m，C 的单位是 m⁻¹。</p></div></div>`;
+  const rayMatEq=E(V('y₂','θ₂'),'<span>=</span>',M('A','B','C','D'),V('y₁','θ₁'));
+  const resultEquation=E(V('y₂','θ₂'),'<span>=</span>',M('A','B','C','D'),V('y₁','θ₁'),'<span class="math-id">（行乘列）</span>');
+  const p=(window.LASER_PRINCIPLES||[]).find(x=>x.id==='raymatrix');
+  const solid=(window.LASER_COURSES||[]).find(x=>x.id==='solid');
+  const course=solid?.lessons?.find(x=>x.id==='solid-03');
+  // Lesson stage 03 acts as a friendly entry, with a detailed, independently addressable derivation next door.
+  if(course){
+    const target=course.sections.find(x=>x.title.includes('传播矩阵原理'));
+    if(target){target.title='光线传播矩阵：从数学复习到光路计算';target.body=`<p>还记得矩阵的<strong>行乘列</strong>吗？它在光学里有特别直观的意义：第一行算光线走到哪里，第二行算光线向哪边走。先不急着背 ABCD，我们把公式写成真正的方阵：</p>${B(resultEquation,'把右侧列向量依次乘上矩阵的两行，就分别得到 y₂ 与 θ₂。')}<p>先用一个标准例子理解矩阵，再回到光线传播。记住 <strong>自由传播改变高度，薄透镜改变倾角</strong>，你就能自己推导出两个最常见的光学矩阵。</p>${formulaMini}<p>上面每个方阵都可以独立拼接成复杂光路。<a class="text-link" href="#/principle/raymatrix">进入详细推导与交互练习 →</a>，跟着每一步把公式真正算出来。</p>`;}
+    const next=course.sections.find(x=>x.title.includes('从两镜扩展到折叠腔'));
+    if(next)next.body=`<p>当光路里有多段空气、晶体和折叠腔镜时，关键是保持每一段的先后顺序。一个往返系统的矩阵写成：</p>${B(E('<span>M<sub>rt</sub></span>','<span>=</span>',M('A','B','C','D')),'真实 M<sub>rt</sub> 需要从 M1 出发，沿谐振腔一整圈返回同一参考面后依次相乘。')}<p>对高斯基模，复光束参数满足 <span class="formula-inline">q = (Aq+B)/(Cq+D)</span>；这一步在学会基础矩阵之后再推，不需要今天就把它记住。<a class="text-link" href="#/principle/raymatrix">先回到基础推导 →</a></p>`;
+    course.min=25;
+  }
+  const pump=solid?.lessons?.find(x=>x.id==='solid-02');
+  if(pump){const th=pump.sections.find(x=>x.title.includes('热透镜到底改了什么'));if(th){th.body=`<p>高斯泵浦造成非均匀温度分布，晶体的波前在初步分析中可用一块等效薄透镜描述。记住：它的焦距是随泵浦状态变化的，不是固定的玻璃透镜。</p>${B(E('<span>M<sub>thermal</sub></span>','<span>=</span>',M('1','0',Fr('−1','f<sub>th</sub>'),'1')),'热透镜焦距 f<sub>th</sub> 是测量或热模型给出的等效参数。')}<p>在腔模计算中，热透镜与腔长、腔镜曲率共同决定稳定性，不能用冷腔尺寸代替工作状态。</p>`;}}
+
+  if(p){
+    const lab=p.sections.find(x=>x.title.includes('动手计算'));
+    // Keep the existing fully tested slider logic, but replace the awkward horizontal coefficient cards.
+    if(lab){
+      const k=lab.body.indexOf('<div class="ml-cards">');
+      const z=lab.body.indexOf('<div class="ml-steps">',k);
+      if(k>=0&&z>k){
+        const liveMat=M('<span data-ml="A">0.5000</span>','<span data-ml="B">0.1500 m</span>','<span data-ml="C">−5.0000 m⁻¹</span>','<span data-ml="D">0.5000</span>');
+        const liveVec=V('<span data-ml="yout">0.500 mm</span>','<span data-ml="tout">−5.000 mrad</span>');
+        const panel=`<div class="math-lab-showcase"><h4>当前光路的总 ABCD 矩阵（真正的 2×2 方阵）</h4>${E('<span>M<sub>total</sub></span>','<span>=</span>',liveMat)}<div class="math-lab-order">先 P(d₁) → 后 F(f) → 最后 P(d₂)，因此 M<sub>total</sub> = P(d₂) · F(f) · P(d₁)</div><div class="math-lab-output"><div><h4>输出光线状态</h4><div class="math-note">显示单位为 mm 和 mrad；代入矩阵运算前统一换算为 m 与 rad。</div></div>${E('<span>r<sub>out</sub></span>','<span>=</span>',liveVec)}</div></div>`;
+        lab.body=lab.body.slice(0,k)+panel+lab.body.slice(z);
+      }
+      lab.body=lab.body.replace('用真实的数值验证矩阵连乘。下面这套模型是：','现在请自己动手改变数字。下面的模型是：');
+    }
+    p.subtitle='矩阵乘法 → 高度与倾角 → 自由传播 → 透镜 → 反射镜 → 连乘与实验';
+    p.sections=[
+      {title:'第一步：先复习矩阵的“行乘列”',body:`<p>先不谈激光器。矩阵就是把一组线性关系组织成方形表格。比如：</p>${B(E(example,V('5','6'),'<span>=</span>',V('17','39')),'第一行：1×5 + 2×6 = 17。第二行：3×5 + 4×6 = 39。')}<p>只要明白这两次运算，传播矩阵就不神秘。<strong>每一行负责计算一个输出量，每一列对应一个输入量。</strong>光学里的 ABCD 也完全遵循这个规则。</p><details class="theory-mini-quiz"><summary>试着自己算：第二行的 39 从哪来？</summary><p>第三个矩阵元 3 乘输入高度 5，第四个矩阵元 4 乘输入 6，所以 3×5+4×6=39。</p></details>`},
+      {title:'第二步：为什么光线只需要两个数字？',body:`<p>在近轴光学里，一条光线在某个截面可以用两个变量描述：<b>y</b> 是它离光轴有多高，<b>θ</b> 是它相对于光轴倾斜多少。把这两个数从上到下写成一列：</p>${B(E('<span>r</span>','<span>=</span>',V('y','θ')),'列向量不是两个互不相关的符号：y 决定位置，θ 决定走向。')} ${demoFig}<p>通过一段光学系统之后，光线变成新的 <b>y₂、θ₂</b>；在近轴条件下，可以由输入 y₁、θ₁ 线性计算：</p>${B(resultEquation,'第一行：y₂ = Ay₁+Bθ₁；第二行：θ₂ = Cy₁+Dθ₁。')}<p><strong>四个字母的意义：</strong>A 是高度→高度，B 是角度→高度，C 是高度→角度，D 是角度→角度。采用 y(m)、θ(rad) 约定时，A 和 D 无量纲，B 的单位为 m，C 的单位为 m⁻¹。</p>`},
+      {title:'第三步：自己推导自由传播矩阵 P(d)',body:`<p>从输入面走到输出面，中间没有透镜。光线方向不变：<b>θ₂ = θ₁</b>。但是光线有倾角，所以高度会变化。由直角三角形：</p><div class="math-step-formula">y₂ = y₁ + d · tanθ₁ ≈ y₁ + dθ₁</div><p>最后的约等号来自近轴条件：当 θ 以弧度表示、角度很小时 tanθ≈θ。</p>${demoFig}${B(E('<span>P(d)</span>','<span>=</span>',M('1','d','0','1')),'你不需要死记：直接把 y₂ = 1·y₁ + d·θ₁，θ₂ = 0·y₁ + 1·θ₁ 的系数按两行摆进去即可。')}<p>注意：<strong>自由传播矩阵左下角是 0</strong>，因为在均匀空间里光线倾角不随传播距离改变。</p>`},
+      {title:'第四步：自己推导薄透镜矩阵 F(f)',body:`<p>薄透镜的作用与自由传播刚好不同：我们把薄透镜的厚度近似为零，因此<strong>穿过透镜的高度不变</strong>，但是传播方向发生变化。</p><div class="math-step-formula">y₂ = y₁</div><div class="math-step-formula">θ₂ = θ₁ − y₁/f</div>${lensFig}${B(E('<span>F(f)</span>','<span>=</span>',M('1','0',Fr('−1','f'),'1')),'上面两行方程的系数，恰好就是四个矩阵元；正焦距 f 为会聚透镜。')}<p>想一下为什么左下角是 <span class="formula-inline">−1/f</span>：入射高度 y₁ 越大，透镜让光线转过的角度越大。对固体激光器而言，<strong>增益晶体的等效热透镜</strong>在初步近轴计算中也可以先用这个矩阵描述。</p>`},
+      {title:'第五步：球面反射镜与热透镜',body:`<p>球面镜会让光线的传播方向改变。把反射之后的路径“展开”为正向传播的局部坐标，凹面球面镜可以看成等效焦距 f=R/2 的聚焦元件：</p>${B(E('<span>M(R)</span>','<span>=</span>',M('1','0',Fr('−2','R'),'1')),'此处规定会聚凹面镜 R>0；不同书籍若反射坐标与曲率符号不同，矩阵的符号也需相应统一。')}<p>这就解释了为什么谐振腔镜片的<strong>曲率半径 R</strong>会影响腔模，而平面反射镜的近轴聚焦作用可以令 R→∞ 得到零。</p>${B(E('<span>F<sub>th</sub></span>','<span>=</span>',M('1','0',Fr('−1','f<sub>th</sub>'),'1')),'热透镜与薄透镜使用同一数学结构，fth 要随泵浦与散热条件变化。')}`},
+      {title:'第六步：一段光路为什么是“右边先乘”？',body:`<p>设光线先传播 <b>d₁</b>，再经过焦距 <b>f</b> 的透镜，最后传播 <b>d₂</b>。写成三个变换：</p>${B(E('<span>M<sub>total</sub></span>','<span>=</span>',M('1','d₂','0','1',true),M('1','0',Fr('−1','f'),'1',true),M('1','d₁','0','1',true)),'从右向左依次作用在输入列向量上：先 P(d₁)，再 F(f)，最后 P(d₂)。') }<p>为什么不能交换？因为同样一段自由传播，放在透镜前后时，透镜处的光线高度不同，所以折射角也不同。</p><div class="math-explain">你可以把矩阵乘法理解为“光学操作说明书”：最右侧先执行，执行完把输出交给它左边的元件，最终得到整段光路的结果。</div>`},
+      lab||{title:'第七步：自己代入数字',body:'<p>本节动态计算器暂不可用。</p>'},
+      {title:'扩展阅读：从传播矩阵到高斯光束 q',body:`<p>学完上面各步，你会知道传播矩阵本来描述的是一条几何光线。高斯光束除了中心光线，还包含光斑半径和波前曲率。把这些性质编码成复参数 q，就能继续使用相同的 A、B、C、D：</p>${B(E('<span>q₂</span>','<span>=</span>','<span>(Aq₁ + B) / (Cq₁ + D)</span>'),'这不是两条几何光线的列向量，而是描述高斯光束波前和光斑的复参数传播公式。')}<p>在真正的三镜折叠腔中，要先得到返回同一参考面的<strong>往返矩阵</strong>：</p>${B(E('<span>M<sub>rt</sub></span>','<span>=</span>',M('A','B','C','D')),'之后求自洽高斯腔模 q，并沿各段传播到 Nd:YVO₄、AOM 和两块 LBO 的位置。')}<p>这一部分先作为后续学习的接口。今天最关键的是把前面的矩阵来源、行乘列和先后顺序弄明白。</p><p><a class="text-link" href="#/lesson/solid-03">返回固体激光第三阶段 →</a>　<a class="text-link" href="#/formulas/solid">记忆公式符号 →</a></p>`}
+    ];
+    p.sections[6].title='第七步：动手计算，检验你的矩阵';
+  }
+
+  // Other physical-theory pages use the same standard display, so learners never see a raw [[a,b],[c,d]].
+  const ab=(window.LASER_PRINCIPLES||[]).find(x=>x.id==='abcd');
+  if(ab){
+    const sec=ab.sections.find(x=>x.title==='矩阵建立');if(sec)sec.body=`<p>先选定统一坐标，在同一均匀介质中把每段自由传播和每块透镜、球面镜转换成方阵。<b>真实顺序从右向左相乘</b>。</p>${formulaMini}<p><a class="text-link" href="#/principle/raymatrix">回到“矩阵为什么这样写”的逐步推导 →</a></p>`;
+    const step=ab.sections.find(x=>x.title==='求解驻波腔');if(step)step.body=`<p>往返矩阵必须从一个参考面出发，回到同一截面。矩阵形式如下：</p>${B(E('<span>M<sub>rt</sub></span>','<span>=</span>',M('A','B','C','D')),'对稳定的高斯模，可进一步施加自洽条件 q=(Aq+B)/(Cq+D)，求出束腰及各处光斑。')}<p>这里的 A、B、C、D 不是任意常数，而是由镜面曲率、晶体厚度和实际距离共同计算得到的。</p>`;
+  }
+  const therm=(window.LASER_PRINCIPLES||[]).find(x=>x.id==='thermal');
+  if(therm){const sec=therm.sections.find(x=>x.title==='一阶近似');if(sec)sec.body=`<p>热透镜等效焦距 f<sub>th</sub> 由泵浦、偏振及散热条件决定。作为薄透镜的近轴近似：</p>${B(E('<span>M<sub>th</sub></span>','<span>=</span>',M('1','0',Fr('−1','f<sub>th</sub>'),'1')),'标称值和可能的焦距范围都要进入谐振腔稳定性扫描。')}`;}
+
+  // Formula reference: every optical matrix now really has rows, columns and square brackets.
+  const F=window.LASER_FORMULAS||[];
+  const byId=id=>F.find(x=>x.id===id);
+  const setExpr=(id,x)=>{const f=byId(id);if(f)f.expression=x;};
+  setExpr('s-ray-vector',E(V(S('y2','y₂'),S('theta2','θ₂')),'<span>=</span>',M(S('A','A'),S('B','B'),S('C','C'),S('D','D')),V(S('y1','y₁'),S('theta1','θ₁'))));
+  setExpr('s-free-ray',E('<span>P('+S('d','d')+')</span>','<span>=</span>',M('1',S('d','d'),'0','1')));
+  setExpr('s-lens-ray',E('<span>F('+S('f','f')+')</span>','<span>=</span>',M('1','0',Fr('−1',S('f','f')),'1')));
+  setExpr('s-mirror-ray',E('<span>M('+S('R','R')+')</span>','<span>=</span>',M('1','0',Fr('−2',S('R','R')),'1')));
+  setExpr('s-thermal',E('<span>M<sub>th</sub></span>','<span>=</span>',M('1','0',Fr('−1',S('fth','f<sub>th</sub>')),'1')));
+  const round=byId('s-matrix');if(round)round.expression=`${E('<span>M<sub>rt</sub></span>','<span>=</span>',M(S('A','A'),S('B','B'),S('C','C'),S('D','D')))}<div class="math-under">高斯腔模自洽条件：q = (Aq+B)/(Cq+D)。各字母请点击查询。</div>`;
+
+  // Author-existing non-matrix-topic sections may include a literal [[ ... ]] syntax; convert their content, too.
+  const bracket=/\[\[\s*([^,\[\]]+?)\s*,\s*([^,\[\]]+?)\s*\]\s*,\s*\[\s*([^,\[\]]+?)\s*,\s*([^,\[\]]+?)\s*\]\]/g;
+  for(const c of window.LASER_COURSES||[])for(const l of c.lessons||[])for(const section of l.sections||[])if(!section.body.includes('<svg'))section.body=section.body.replace(bracket,(_,a,b,c,d)=>M(a.trim(),b.trim(),c.trim(),d.trim(),true));
+  for(const t of window.LASER_PRINCIPLES||[])for(const section of t.sections||[])if(!section.body.includes('<svg'))section.body=section.body.replace(bracket,(_,a,b,c,d)=>M(a.trim(),b.trim(),c.trim(),d.trim(),true));
+  for(const f of F)if(f.expression.includes('[['))f.expression=f.expression.replace(bracket,(_,a,b,c,d)=>M(a.trim(),b.trim(),c.trim(),d.trim(),true));
+})();
+
   </script>
   <script>
 (() => {
