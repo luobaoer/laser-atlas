@@ -6,7 +6,7 @@
 
 ## 当前版本
 
-**2026-10-29 · v0.3.0** — 增加「传播矩阵原理」图解课程和交互练习。今天的学习路径：
+**2026-10-29 · v0.3.1** — 将传播矩阵统一改为真正的 2×2 方阵与竖排列向量；按照行乘列 → 光线变量 → 自由传播 → 薄透镜 → 球面镜 → 矩阵连乘的顺序深入推导。当前学习入口：
 
 1. [固体激光：高斯光束、ABCD 与腔长](https://luobaoer.github.io/laser-atlas/#/lesson/solid-03)
 2. [传播矩阵原理专题（图解 + 交互练习）](https://luobaoer.github.io/laser-atlas/#/principle/raymatrix)
@@ -18,6 +18,7 @@
 | --- | --- | --- | --- |
 | 2026-10-29 | v0.2.0 | [打开旧版](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.2.0/) | 初版设计流程课程与公式手册 |
 | 2026-10-29 | v0.3.0 | [打开本版快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.3.0/) | 矩阵乘法、传播矩阵图解、公式词条及可调数值实验 |
+| 2026-10-29 | v0.3.1 | [打开最新版本快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.3.1/) | 方阵与列向量排版、聊天式推导、图解及动态矩阵 |
 
 **更新与回退规则：** 根目录 `index.html` 始终用于线上首页。每次发布前，先把旧站完整存入 `versions/YYYY-MM-DD_vX.Y.Z/index.html`；再将新版本同时写入版本目录和根目录。需要回退时，将对应历史快照内容复制回根目录 `index.html` 并提交。原有历史快照不删除。
 
