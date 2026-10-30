@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f5f7f5" />
-  <meta name="description" content="Laser Atlas v0.4.0：面向光学工程师的可交互激光技术学习平台。传播矩阵专题已同步示意图与分数排版。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
+  <meta name="description" content="Laser Atlas v0.4.1：面向光学工程师的可交互激光技术学习平台。传播矩阵专题已同步示意图与分数排版。系统学习固体激光、光纤激光、CO₂ 激光与蓝光半导体激光。" />
   <meta property="og:title" content="Laser Atlas · 激光器设计学习平台" />
   <meta property="og:description" content="沿真实激光器设计流程系统学习。术语点按解释，公式字母可查可记。" />
   <title>Laser Atlas · 激光器设计学习平台 v0.3.4</title>
@@ -88,7 +88,7 @@ body.is-teaching .sidebar,body.is-teaching .topbar,body.is-teaching .mobile-bott
         </div>
       </header>
       <main class="page-content" id="page" tabindex="-1"></main>
-      <footer class="app-footer"><span>LASER ATLAS · v0.4.0（2026-10-30） · 学习是理解设计决策，而不只是得到结果</span><span>所有计算工具均为教学近似，不代替工程验证</span></footer>
+      <footer class="app-footer"><span>LASER ATLAS · v0.4.1（2026-10-30） · 学习是理解设计决策，而不只是得到结果</span><span>所有计算工具均为教学近似，不代替工程验证</span></footer>
     </div>
     <nav class="mobile-bottom" aria-label="手机快捷导航"><a href="#/home"><span>⌂</span>首页</a><a href="#/course/solid"><span>◈</span>设计课</a><a href="#/formulas/solid"><span>ƒ</span>公式</a><a href="#/notes"><span>▧</span>笔记</a></nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -1135,6 +1135,35 @@ window.LASER_FORMULAS=[
   if(intro&&!intro.sections.some(s=>s.title==='下一步：完整三镜腔模位置设计'))intro.sections.push({title:'下一步：完整三镜腔模位置设计',body:`<p>你已经掌握自由传播、镜片和晶体矩阵。下一阶段不再固定输入光斑，而是建立<strong>完整三镜腔往返矩阵</strong>，先求 M1 处本征 q̃，再沿真实光路逐面计算。</p><p><a class="btn" href="#/lesson/solid-03b">学习：从 ABCD 到元件位置设计 →</a>　${link}</p>`});
   const fold=course.lessons.find(x=>x.id==='solid-04');
   if(fold)fold.sections.push({title:'工程实践：把六段距离放进腔模设计器',body:`<p>在讨论 M1–M3 腔镜和双 LBO 晶体时，你可以使用新加入的 1064 nm 腔模设计器，检查 d₁–d₆ 对本征腔模、热稳定性和各参考面光斑的影响。模型包含 M2 切向/弧矢分离与增益热透镜，但暂不包含 532/355 nm 非线性耦合。</p><p>${link}</p>`});
+})();
+  </script>
+  <script>
+(() => {
+  'use strict';
+  // v0.4.1: end-pump source and f1/f2 relay are designed BEFORE finalizing the 1064 resonator.
+  // Keep existing course IDs and all previously saved notes intact.
+  const solid=(window.LASER_COURSES||[]).find(c=>c.id==='solid');if(!solid)return;
+  const pageLink='<a class="btn" href="tools/resonator1064/#pump">进入独立泵浦整形与模场匹配设计器 ↗</a>';
+  const frac=(a,b)=>`<span class="math-frac"><span>${a}</span><span>${b}</span></span>`;
+  const pump=solid.lessons.find(l=>l.id==='solid-02');
+  if(pump&&!pump.sections.some(s=>s.title.includes('LD 泵浦双轴'))) {
+    const modules=[
+      {title:'LD 泵浦双轴表征：功率、快慢轴与光束参数积',body:`<p>端面泵浦设计不能从一个假设的圆形光斑开始。首先需要定义泵浦源：工作波长与光谱线宽、光功率及温度变化、快轴/慢轴等效束腰、发散角、<strong>M² 或光束参数积 BPP</strong>，以及泵浦器件的偏振与发射像散。裸边发射 LD、光纤耦合 LD 和已经完成 FAC/SAC 整形的光束不能用相同的输入模型代替。</p><p>高斯或二阶矩等效光束在单轴束腰处，束腰半径与发散半角满足：</p><div class="formula">BPP<sub>j</sub> = w<sub>0,j</sub>·θ<sub>j</sub> = ${frac('M²<sub>j</sub> λ<sub>p</sub>','π')}</div><p>其中 j 分别代表两个互相垂直的轴。高 M² 对应更大的光束参数积，无法只通过增加透镜把亮度凭空提高。系统不能把多模 LD 的 M² 强行设为 1。</p>`},
+      {title:'泵浦整形光路：从等效输入腰面设计 f₁、f₂ 及晶体入口',body:`<p>定义独立于 1064 nm 谐振腔的泵浦传播链：</p><div class="flowchips"><span>LD / 已整形输入面</span><b>→</b><span>空气传播 l₁</span><b>→</b><span>透镜 f₁</span><b>→</b><span>间隔 l₁₂</span><b>→</b><span>透镜 f₂</span><b>→</b><span>距离 l₂</span><b>→</b><span>Nd:YVO₄ 入口</span></div><p>在近轴一阶模型中，泵浦光学的总传输矩阵为：</p><div class="formula">M<sub>pump</sub> = P(l₂)·F(f₂)·P(l₁₂)·F(f₁)·P(l₁)</div><p>不过高功率泵浦常是非理想高斯光束，所以专业设计中不应只传播一个 TEM₀₀ 复参数 q。第一版工具采用每轴<strong>二阶矩传播</strong>，令其二阶矩矩阵 Σ 满足 Σ′ = M Σ Mᵀ，由此得到各处等效半径和发散角。进入 Nd:YVO₄ 的平面界面后，采用约化角 [y,nθ] 状态，晶体内传播矩阵右上角为 d/nₚ。</p><p>若实际泵浦源为裸芯片且存在不可忽略的源面像散、非高斯近平顶、多芯片叠加或各轴非共腰面，则需要导入实测束质/光斑数据，不能把本模型当成完整的快慢轴追迹。${pageLink}</p>`},
+      {title:'端面泵浦吸收、量子亏损与增益区域',body:`<p>泵浦通过整形透镜、输入腔镜镀膜后，最终到达 Nd:YVO₄ 入口。设泵浦系统总透过率 T、晶体厚度 L、泵浦波长有效吸收系数 α，则简化的单程体吸收功率为：</p><div class="formula">P<sub>abs</sub> = P<sub>LD</sub> T [1 − exp(−αL)]</div><p>体积热源还取决于深度分布、泵浦横向强度分布与冷却条件。808 nm 泵浦与更靠近 1064 nm 的同带泵浦，其量子亏损不同，但仅由波长差不能计算出准确热透镜。最低量子亏损预算可参考：</p><div class="formula">P<sub>QD,min</sub> ≈ P<sub>abs</sub> (1 − ${frac('λ<sub>p</sub>','λ<sub>laser</sub>')})</div><p>晶体温升和热透镜需要求解热传导及折射率、端面形变与应力等机制；不能简单使用“吸收功率越大，f<sub>th</sub> 就按比例缩小”的固定公式。</p>`},
+      {title:'泵浦与 1064 nm 谐振腔模式耦合：先匹配，再优化热稳定',body:`<p>在同一个 Nd:YVO₄ 晶体截面，应把泵浦两轴光强分布与 1064 nm 基频本征模进行比较。这里至少记录晶体前表面、中心与后表面的泵浦半径、1064 nm 模半径、两轴偏心量、沿 z 的吸收功率分布，并对吸收深度进行加权。</p><p>第一版设计器使用归一化强度分布的<strong>Bhattacharyya 系数平方 BC²</strong>作为 0–1 的形状匹配指标。它只能表示两束强度分布相似程度，不等于吸收泵浦利用率、激光阈值或转换效率。仅在理想同轴、双高斯模型中，形状一致才得到 1。</p><p>更关键的是选择模场大小时存在权衡：泵浦太小，会提高热梯度和热畸变风险；泵浦过大，可能降低与基频模的有效重叠，使高阶模式更容易获得增益。具体最佳半径比例随泵浦功率、增益饱和和热效应而变化，不能预设一个“永远最优”的 1:1 比例。</p><p><strong>真正的设计循环</strong>是：泵浦整形参数 → 晶体内泵浦/吸收分布 → 给出热透镜及其范围 → 求 1064 nm 本征腔模 → 重新评价匹配 → 调整泵浦与腔长。${pageLink}</p><p>延伸阅读：<a href="https://www.rp-photonics.com/end_pumping.html" target="_blank" rel="noopener">End Pumping</a>、<a href="https://www.rp-photonics.com/resonator_design.html" target="_blank" rel="noopener">Resonator Design</a>。</p>`}
+    ];
+    pump.sections.splice(1,0,...modules);
+    pump.goals.push('掌握泵浦 f₁/f₂ 整形、吸收和与 1064 nm 本征模的迭代设计');
+    pump.min=Math.max(30,pump.min||0);
+  }
+  const cavity=solid.lessons.find(l=>l.id==='solid-03b');
+  if(cavity&&!cavity.sections.some(s=>s.title.includes('前置设计'))) {
+    cavity.sections.unshift({title:'0 · 前置设计：泵浦空间分布决定增益与热透镜',body:`<p>注意：1064 nm 无源稳定腔只提供可能存在的几何高斯模，不能说明泵浦是否能有效激发该模式。设计正确顺序是先有泵浦源可用参数和整形方案，再利用一组泵浦功率/热透镜范围反复优化腔型。</p><p>请先完成<a href="#/lesson/solid-02">泵浦与增益设计章节</a>，然后在设计器的顶部找到“<strong>端面泵浦整形、晶体吸收与 1064 nm 模场匹配</strong>”模块，比较晶体入口、中心和出口两个光束的宽度及吸收加权形状匹配。${pageLink}</p><p>本工具当前只能做简化泵浦几何、Beer–Lambert 吸收和近轴模场比较，不能直接从泵浦功率预测实际 355 nm 输出或者热透镜值。热透镜须由测量或完整热模型提供。</p>`});
+    cavity.min=Math.max(cavity.min,35);
+  }
+  const intro=solid.lessons.find(l=>l.id==='solid-03');
+  if(intro&&!intro.sections.some(s=>s.title.includes('先验证泵浦')))intro.sections.push({title:'建立腔模后，先验证泵浦设计',body:`<p>在深入调整 M1–M3 之前，还需要检查 Nd:YVO₄ 内的真实泵浦形状、吸收长度和与本征模的重叠。仅凭 ABCD 稳定性并不能判断能否高效起振。</p><p><a href="#/lesson/solid-02" class="btn secondary">回到泵浦整形与增益设计 →</a>　${pageLink}</p>`});
 })();
   </script>
   <script>
