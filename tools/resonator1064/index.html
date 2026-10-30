@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f8f7">
-<meta name="description" content="Laser Atlas：三镜折叠1064 nm谐振腔光斑与ABCD本征模教学设计器，可调整d1–d6、晶体厚度、热透镜、腔镜曲率并查看各面光斑。">
-<title>1064 nm 三镜腔模设计器 · Laser Atlas v0.4.0</title>
+<meta name="description" content="Laser Atlas：三镜折叠1064 nm谐振腔光斑与ABCD本征模教学设计器，可调整泵浦 f1/f2 镜片位置、源束腰与 M²、晶体泵浦吸收、d1–d6、热透镜并查看泵浦—1064模场匹配。">
+<title>1064 nm 三镜腔模设计器 · Laser Atlas v0.4.1</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23183931%22/><path d=%22M18 54L57 20 84 50 41 84Z%22 fill=%22none%22 stroke=%22%23b9efd8%22 stroke-width=%226%22/></svg>">
 <style>
 :root{color-scheme:light;--ink:#183a31;--sub:#657b71;--brand:#126c57;--line:#dfe9e4;--bg:#f4f7f5;--paper:#fff;--blue:#2a7eaa;--orange:#d98e45;--warn:#ba622a}
@@ -13,6 +13,10 @@
 @media(max-width:1170px){.studio-grid{grid-template-columns:270px minmax(0,1fr)}.resultstrip{grid-template-columns:repeat(2,minmax(0,1fr))}.cardGrid{grid-template-columns:1fr}.matrixarea{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.shell{padding:0 12px 55px}.topbar{padding:10px 2px;min-height:70px}.brand{font-size:15px}.toplinks{font-size:11px;gap:9px}.hero{padding:22px 20px;display:block;border-radius:16px}.hero h1{font-size:22px}.hero .version{display:inline-block;margin-top:12px}.studio-grid{grid-template-columns:1fr}.left{position:static;max-height:none}.panel{padding:15px 13px}.resultstrip{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{padding:12px}.metric strong{font-size:17px}.chart svg{min-width:590px}.fold-chart svg{min-width:570px}.matrixarea{grid-template-columns:1fr}.spotwrap{grid-template-columns:140px 1fr;gap:7px}.spotwrap svg{max-width:140px}.spotdetails .row{font-size:11px}.panelheader h2{font-size:16px}.thermalSlider input{flex-basis:100%}.field{grid-template-columns:1fr 110px}}
 @media(max-width:390px){.spotwrap{grid-template-columns:1fr}.spotwrap svg{max-width:180px;margin:0 auto}.resultstrip{gap:7px}.metric strong{font-size:15px}}
+
+/* v0.4.1: independent end-pump shaping, optical absorption and spatial matching */
+.pump-kicker{font-size:10px;letter-spacing:1.8px;font-weight:800;color:#168a70;margin-bottom:5px}.pump-section{scroll-margin-top:14px}.pump-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0 17px}.pump-metric{padding:14px;border:1px solid #dcece3;background:#f6fcf8;border-radius:12px;min-width:0}.pump-metric small{display:block;color:#648879;font-size:11px}.pump-metric strong{display:block;font-size:20px;white-space:nowrap;font-variant-numeric:tabular-nums}.pump-metric span{color:#73887c;font-size:10px}.pump-dual-charts{display:grid;grid-template-columns:1fr 1fr;gap:15px}.pump-chart{min-width:0}.pump-chart h3{font-size:13px;margin:5px 0 1px}.pump-chart p{font-size:11px;color:#668575;margin:0 0 8px}.pump-chart .chart svg{min-width:420px}.pump-states{margin:15px 0}.pump-warnings{font-size:12px;line-height:1.8;color:#6d786b}.pump-warnings strong{color:#865a2b}.pump-theory{border:1px solid #dfebe1;border-radius:12px;padding:12px 15px;background:#fbfefb}.pump-theory summary{font-size:12px;font-weight:750;cursor:pointer;color:#2b7457}.pump-theory .method{padding-top:14px}.pump-theory a{word-break:break-all}.pump-theory .math-fraction{font-size:.95em}.pump-section .tablewrap{overflow:auto}
+@media(max-width:1250px){.pump-dual-charts{grid-template-columns:1fr}}@media(max-width:960px){.pump-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.pump-metric{padding:10px}.pump-metric strong{font-size:17px}.pump-dual-charts{grid-template-columns:1fr}.pump-section{padding:15px}}
 </style>
 </head>
 <body>
@@ -21,7 +25,27 @@
 <section class="hero"><div><span class="eyebrow">OPTICAL DESIGN STUDIO · 1064 NM</span><h1>三镜折叠谐振腔 · 本征模与位置设计器</h1><p>从 ABCD 往返矩阵出发，分别求切向 / 弧矢自洽高斯模。移动晶体、腔镜和热透镜，观察各关键面的光斑半径、波前曲率与稳定区变化。</p></div><span class="version">2026-10-30 · V1 教学模型</span></section>
 <div class="notice"><strong>模型边界</strong><span>仅计算 1064 nm 的无损一阶近轴腔模；材料按标量有效折射率，Nd:YVO₄ 热透镜按晶体内部可移动的等效薄透镜处理；输入 fth 是约化角矩阵 C=−1/fth 所对应的空气等效焦距。暂不计算增益、AOM 动态损耗、532/355 nm 频率转换、损伤阈值和实际输出功率。默认参数是教学算例，并非已核实的供应商腔型。</span></div>
 <div class="studio-grid">
-<aside class="left"><div class="card"><div class="headcard"><h2>元件及位置参数</h2><p>全部长度用 mm；设为 0 的腔镜曲率表示平面镜；热透镜焦距 0 表示关闭。</p><div class="buttons"><button id="reset" class="btn">恢复示例</button><button id="exportJson" class="btn">导出设计 JSON</button><button id="exportCsv" class="btn">导出面数据 CSV</button><label class="btn" for="importJson" style="cursor:pointer">导入 JSON<input id="importJson" type="file" accept="application/json" hidden></label></div><div id="saveStatus" class="statusText">设置会保存在当前浏览器</div></div>
+<aside class="left"><div class="card"><div class="headcard"><h2>泵浦与腔内元件参数</h2><p>全部长度用 mm；设为 0 的腔镜曲率表示平面镜；热透镜焦距 0 表示关闭。</p><div class="buttons"><button id="reset" class="btn">恢复示例</button><button id="exportJson" class="btn">导出设计 JSON</button><button id="exportCsv" class="btn">导出面数据 CSV</button><label class="btn" for="importJson" style="cursor:pointer">导入 JSON<input id="importJson" type="file" accept="application/json" hidden></label></div><div id="saveStatus" class="statusText">设置会保存在当前浏览器</div></div>
+<details class="group" open><summary>Ⓟ 端面泵浦整形与耦合（独立光路）</summary><div class="fields">
+<p class="field-hint">泵浦源 → f₁ → f₂ → Nd:YVO₄；下列“输入腰面”是快/慢轴经预处理后的等效二阶矩腰面，不是把裸 LD 直接当成理想高斯光。可以分别填入测得的两个轴 M²。</p>
+<div class="field"><label for="pump_wavelengthNm">泵浦波长 λp / nm</label><input type="number" id="pump_wavelengthNm" step="1" data-pump="wavelengthNm" value="808"></div>
+<div class="field"><label for="pump_powerW">LD 发射功率 / W</label><input type="number" id="pump_powerW" step="0.5" data-pump="powerW" value="20"></div>
+<div class="field"><label for="pump_waistXUm">输入腰面 X 半径 w0,x / μm</label><input type="number" id="pump_waistXUm" step="5" data-pump="waistXUm" value="75"></div>
+<div class="field"><label for="pump_waistYUm">输入腰面 Y 半径 w0,y / μm</label><input type="number" id="pump_waistYUm" step="5" data-pump="waistYUm" value="65"></div>
+<div class="field"><label for="pump_m2x">输入 X 轴 M²</label><input type="number" id="pump_m2x" step="1" data-pump="m2x" value="10"></div>
+<div class="field"><label for="pump_m2y">输入 Y 轴 M²</label><input type="number" id="pump_m2y" step="1" data-pump="m2y" value="12"></div>
+<div class="field"><label for="pump_sourceToF1Mm">等效腰面 → f₁ / mm</label><input type="number" id="pump_sourceToF1Mm" step="1" data-pump="sourceToF1Mm" value="25"></div>
+<div class="field"><label for="pump_f1Mm">第一片透镜 f₁ / mm</label><input type="number" id="pump_f1Mm" step="1" data-pump="f1Mm" value="25"></div>
+<div class="field"><label for="pump_f1ToF2Mm">f₁ → f₂ / mm</label><input type="number" id="pump_f1ToF2Mm" step="1" data-pump="f1ToF2Mm" value="120"></div>
+<div class="field"><label for="pump_f2Mm">第二片透镜 f₂ / mm</label><input type="number" id="pump_f2Mm" step="1" data-pump="f2Mm" value="75"></div>
+<div class="field"><label for="pump_f2ToGainMm">f₂ → Nd 前表面 / mm</label><input type="number" id="pump_f2ToGainMm" step="1" data-pump="f2ToGainMm" value="65"></div>
+<div class="field"><label for="pump_transmission">整条泵浦通道透过率 0–1</label><input type="number" id="pump_transmission" step="0.01" data-pump="transmission" value="0.9"></div>
+<div class="field"><label for="pump_nPump">Nd 对泵浦折射率 nₚ</label><input type="number" id="pump_nPump" step="0.01" data-pump="nPump" value="2.18"></div>
+<div class="field"><label for="pump_absorptionPerMm">Nd 泵浦吸收系数 α / mm⁻¹</label><input type="number" id="pump_absorptionPerMm" step="0.01" data-pump="absorptionPerMm" value="0.18"></div>
+<div class="field"><label for="pump_offsetXUm">泵浦与腔模 X 偏心 / μm</label><input type="number" id="pump_offsetXUm" step="10" data-pump="offsetXUm" value="0"></div>
+<div class="field"><label for="pump_offsetYUm">泵浦与腔模 Y 偏心 / μm</label><input type="number" id="pump_offsetYUm" step="10" data-pump="offsetYUm" value="0"></div>
+<p class="field-hint">这里的 f₁/f₂ 只作用于泵浦光，不进入 1064 nm 谐振腔。透过率汇总光学整形、M1 泵浦透射和其他损耗；吸收系数需用泵浦中心波长及晶体掺杂、温度相关资料核定。</p>
+</div></details>
 <details class="group" open><summary>① 六段空气间隙 d₁–d₆</summary><div class="fields">
 <div class="field"><label for="d1">d₁ · M1 → 增益前端</label><input id="d1" type="number" min="0.1" max="500" step="1" data-path="gap.d1" value="16"></div>
 <div class="field"><label for="d2">d₂ · 增益后端 → AOM 前端</label><input id="d2" type="number" min="0.1" max="500" step="1" data-path="gap.d2" value="23"></div>
@@ -51,11 +75,22 @@
 <div class="field"><label for="extraOffset">距离本段前端 / mm</label><input id="extraOffset" type="number" min="0" step="1" data-path="extraLens.offset" value="10"></div>
 <div class="field"><label for="extraF">薄透镜焦距 / mm</label><input id="extraF" type="number" step="10" data-path="extraLens.fmm" value="250"></div>
 <div class="field"><label for="extraAperture">有效孔径直径 / mm</label><input id="extraAperture" type="number" step="0.2" data-path="extraLens.aperture" value="5"></div>
-<p class="field-hint">此选项用于研究额外的腔内聚焦元件，并不默认代表实际机型使用透射透镜。位置偏移不得超过所选 dᵢ 的长度。泵浦光路的 f₁/f₂ 不属于 1064 nm 谐振腔，需要另建泵浦模型。</p></div></details>
+<p class="field-hint">此选项用于研究额外的腔内聚焦元件，并不默认代表实际机型使用透射透镜。位置偏移不得超过所选 dᵢ 的长度。泵浦光路的 f₁/f₂ 不属于 1064 nm 谐振腔；请使用最上方“端面泵浦整形与耦合”单独设定。</p></div></details>
 <details class="group"><summary>⑤ 波长与热透镜扫描设置</summary><div class="fields"><div class="field"><label>基频 λ₀ / nm</label><input type="number" data-path="lambdaNm" value="1064"></div><div class="field"><label>扫描起点 f<sub>th,min</sub></label><input type="number" data-path="scan.min" value="80"></div><div class="field"><label>扫描终点 f<sub>th,max</sub></label><input type="number" data-path="scan.max" value="600"></div><div class="field"><label>扫描点数</label><input type="number" step="1" data-path="scan.count" value="65"></div></div></details>
 </div></aside>
 <div class="dash">
 <div class="resultstrip" id="metrics" aria-live="polite"></div>
+<section class="card panel pump-section" id="pump"><div class="panelheader"><div><div class="pump-kicker">PRE-DESIGN · PUMP BEAM SHAPING</div><h2>端面泵浦整形、晶体吸收与 1064 nm 模场匹配</h2><p>独立泵浦光路：等效输入腰面 → f₁ → f₂ → Nd:YVO₄；计算双轴二阶矩光束在各面的有效半径，比较晶体内的增益泵浦区域与基频本征腔模。</p></div><a class="btn" href="../../#/lesson/solid-02">阅读泵浦设计原理 ↗</a></div>
+<div id="pumpMetrics" class="pump-metrics" aria-live="polite"></div>
+<div class="pump-dual-charts"><div class="pump-chart"><h3>泵浦整形光路 · wₓ(z) / wᵧ(z)</h3><p>横轴从等效输入腰面起；图中展示 f₁、f₂、晶体前表面位置</p><div class="chart" id="pumpRelay"></div></div><div class="pump-chart"><h3>Nd:YVO₄ 晶体内部 · 泵浦与基频模式</h3><p>泵浦 X/Y 与 1064 nm T/S 半径及加权吸收沿 z 的变化</p><div class="chart" id="pumpGain"></div></div></div>
+<div style="margin-top:12px"><button class="btn" id="exportPumpCsv" type="button">导出泵浦/基频沿晶体匹配 CSV</button></div>
+<div class="pump-states"><div class="tablewrap"><table class="planeTable"><thead><tr><th>晶体参考面</th><th>z / mm</th><th>泵浦 wₓ / μm</th><th>泵浦 wᵧ / μm</th><th>1064 w<sub>T</sub> / μm</th><th>1064 w<sub>S</sub> / μm</th><th>归一化形状匹配</th></tr></thead><tbody id="pumpPlanes"></tbody></table></div></div>
+<div id="pumpWarnings" class="pump-warnings"></div>
+<details class="pump-theory"><summary>物理方法、数学公式、适用条件与不能据此判断的结果</summary><div class="method"><p><strong>双轴二阶矩传播。</strong> 输入面定义为各轴等效束腰，<span class="math-fraction"><span>M_j² λₚ</span><span>πw₀,j</span></span> 为等效远场发散半角。用传播矩阵将每个轴的二阶矩矩阵 Σ 变换为 MΣMᵀ，得到各面二阶矩等效光斑半径。空气中自由传播采用 P(d)，聚焦透镜采用 F(f)，晶体内采用 [y,nθ] 坐标下的 P(d/nₚ)。本模块不是未经测量的真实 LD 快慢轴场分布。</p>
+<p><strong>吸收模型。</strong> 入口功率 P<sub>in</sub> = P<sub>LD</sub>·T；P<sub>abs</sub> = P<sub>in</sub>[1−exp(−αL)]；晶体吸收热分布近似与 α exp(−αz) 成正比。量子亏损热功率下限 P<sub>abs</sub>(1−λₚ/λ₁₀₆₄) 只是一项能量预算，实际热负荷还取决于非辐射过程与量子效率。</p>
+<p><strong>重叠指标不是输出效率。</strong> 展示的 0–100% 值是归一化泵浦/激光双轴高斯强度分布的 Bhattacharyya 系数平方 BC²，再对吸收深度加权平均。它只表示横向形状匹配；真实阈值、斜率效率、模式竞争与泵浦利用率，需要速率方程、增益饱和和实际非高斯泵浦分布。</p>
+<p><strong>热透镜暂未自动闭环。</strong> 改变泵浦半径后并不会自动生成唯一 f<sub>th</sub>：真实热透镜须考虑晶体几何、冷却边界、热导率、dn/dT、热应力和端面形变。目前可以先依据测量或热模型给出热焦距的上下限，再使用上方谐振腔部分做参数扫描。</p><p><strong>参考：</strong><a href="https://www.rp-photonics.com/end_pumping.html" target="_blank" rel="noopener noreferrer">RP Photonics · End Pumping</a>、<a href="https://www.rp-photonics.com/resonator_design.html" target="_blank" rel="noopener noreferrer">Resonator Design</a> 和 <a href="https://www.rp-photonics.com/spotlight_2007_04_01.html" target="_blank" rel="noopener noreferrer">Pump Intensity Distribution</a>。</p></div></details>
+</section>
 <section class="card panel"><div class="panelheader"><div><h2>1064 nm 光路拓扑</h2><p>展示真实器件先后关系；M2 折叠不改变展开光路中的累积长度坐标。</p></div><div class="axis-legend"><span><i class="swatch" style="background:#c56d45"></i>1064 nm 腔内往返</span></div></div><div id="topology" class="chart fold-chart"></div><p class="tiny">提醒：图中的折叠角和晶体外形仅用于识别元件。定量光斑曲线使用下方展开坐标 z（从 M1 起沿光路累计），并非屏幕上的像素间距。</p></section>
 <section class="card panel"><div class="panelheader"><div><h2>沿腔展开的本征光束包络</h2><p>由往返 ABCD 解出 q，再沿 M1→M3 单程传播。纵轴是 1/e² 强度半径 w（μm）。</p></div><div class="axis-legend"><span><i class="swatch" style="background:#118264"></i>切向 T</span><span><i class="swatch" style="background:#d47e45"></i>弧矢 S</span></div></div><div id="envelope" class="chart"></div><div id="stableHint" class="statusText"></div></section>
 <section class="card panel"><div class="panelheader"><div><h2>热透镜敏感性扫描</h2><p>扫描 f<sub>th</sub>，观察晶体中心的光斑变化；不稳定区域不显示虚假的光斑数值。</p></div></div><div class="thermalSlider"><label for="fRange">快速调整热透镜焦距</label><input type="range" id="fRange" min="80" max="600" step="5" value="350"><strong id="fRangeOut">350 mm</strong></div><div id="thermalPlot" class="chart"></div><div class="axis-legend" style="padding-top:8px"><span><i class="swatch" style="background:#118264"></i>Nd:YVO₄</span><span><i class="swatch" style="background:#5686bc"></i>AOM</span><span><i class="swatch" style="background:#d47e45"></i>THG</span><span><i class="swatch" style="background:#8b78b8"></i>SHG</span></div></section>
@@ -69,14 +104,14 @@
 <div class="equation"><span>P(d,n) =</span><span class="mat-wrap"><span class="mat"><span>1</span><span class="math-fraction"><span>d</span><span>n</span></span><span>0</span><span>1</span></span></span><span>F(f) =</span><span class="mat-wrap"><span class="mat"><span>1</span><span>0</span><span>−<span class="math-fraction"><span>1</span><span>f</span></span></span><span>1</span></span></span></div>
 <p><strong>注意：</strong>程序实际使用的是 P(d/n)、F(f)、M(R) 的反射矩阵（聚焦项为 −2/R），镜片反射采用展开局部坐标。这里输入的热透镜 f<sub>th</sub> 定义为约化角矩阵中的<strong>空气等效焦距</strong>；不能未经换算地代入使用其他介质和坐标定义测得的焦距。真实折叠镜在切向、弧矢方向需要不同的等效曲率。</p></details>
 <details><summary>为什么本征 q 能求光斑，而几何光线 y、θ 不能？</summary><p>先求完整往返矩阵 M<sub>rt</sub>，要求 <strong>q=(Aq+B)/(Cq+D)</strong>，即 Cq²+(D−A)q−B=0。对归一化后的约化 q̃=q/n，采用 <strong>1/q̃=n/R<sub>w</sub>−iλ₀/(πw²)</strong>。在稳定范围内选 Im(q̃)&gt;0 的物理解，再沿单程传输到每个面。</p><p>这一步给出的是理想 TEM₀₀ 近轴模。输入参数改变后，程序不是固定 M1 光斑顺推，而是<strong>先重新求整个腔的自洽模式，再顺推各个参考面</strong>。</p></details>
-<details><summary>每个距离 dᵢ 的优化目标分别是什么？</summary><p><strong>d₁：</strong>增益晶体内基频模与泵浦模匹配（本工具尚未计算泵浦）；<strong>d₂：</strong>AOM 光斑与孔径、声学渡越时间；<strong>d₃：</strong>M2 处曲率与双轴稳定性；<strong>d₄–d₆：</strong>SHG/THG 中心光斑、波前曲率以及 M3 回程条件。所有距离必须同时满足往返自洽，不能逐项孤立优化。</p></details>
+<details><summary>每个距离 dᵢ 的优化目标分别是什么？</summary><p><strong>d₁：</strong>增益晶体内基频模与独立计算的泵浦双轴模场匹配；<strong>d₂：</strong>AOM 光斑与孔径、声学渡越时间；<strong>d₃：</strong>M2 处曲率与双轴稳定性；<strong>d₄–d₆：</strong>SHG/THG 中心光斑、波前曲率以及 M3 回程条件。所有距离必须同时满足往返自洽，不能逐项孤立优化。</p></details>
 <details><summary>这个模型暂时不能告诉你什么？</summary><p>不能由 1064 nm 光斑反推出 355 nm 功率，因为 SHG/SFG 需要 1064/532 nm 双波长模式、相位匹配、走离、峰值功率和非线性耦合。也不能仅由波前与孔径判断薄膜损伤，必须有脉冲参数、峰值强度、镀膜阈值和测试证据。Nd:YVO₄ 的热透镜并非已知常数，实际要通过实验或温度场估计。</p></details>
 <details><summary>理论依据与参考资料</summary><p>矩阵与约化角约定参考 <a href="https://www.rp-photonics.com/abcd_matrix.html" target="_blank" rel="noopener">RP Photonics · ABCD Matrix</a>；高斯模式和复 q 关系参考 <a href="https://www.rp-photonics.com/gaussian_beams.html" target="_blank" rel="noopener">RP Photonics · Gaussian Beams</a>。以上链接用于核对数学约定，本站的图表与代码为独立教学实现。</p></details>
 <div class="note"><strong>下一步实验建议：</strong>先保持晶体厚度、R₂ 和 f<sub>th</sub> 不变，逐次改变 d₁ 与 d₄，记录 Nd:YVO₄ 和 THG 中心 w 的变化；再改 f<sub>th</sub> 查看稳定区移动；最后调 M2 入射角，比较 T/S 像散。这样的学习顺序能把“位置选择”变成可解释的设计决策。</div>
 </section>
 </div></div>
-<footer class="footnotes">LASER ATLAS · v0.4.0（2026-10-30） · 纯静态教学工具 · 不替代 Zemax/OSLO、完整腔模非线性仿真和实测验证。</footer>
+<footer class="footnotes">LASER ATLAS · v0.4.1（2026-10-30） · 纯静态教学工具 · 不替代 Zemax/OSLO、完整腔模非线性仿真和实测验证。</footer>
 </div>
-<script src="core.js"></script><script src="app.js"></script>
+<script src="core.js"></script><script src="pump.js"></script><script src="pump-ui.js"></script><script src="app.js"></script>
 </body>
 </html>
