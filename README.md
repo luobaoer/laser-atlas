@@ -6,11 +6,13 @@
 
 ## 当前版本
 
-**2026-10-30 · v0.3.4** — 全站数学分式统一采用分子在上、分母在下的专业排版，覆盖固体、光纤、CO₂ 与蓝光公式手册及核心课程；保留术语解释、交互工具和原有教学流程。
+**2026-10-30 · v0.4.0** — 新增 1064 nm 三镜折叠谐振腔设计器及配套工程课程：自由调整 d₁–d₆、材料厚度、折射率、腔镜曲率、热透镜和额外腔内薄透镜位置，实时求往返 ABCD 与各面高斯模。
 
 1. [固体激光：高斯光束、ABCD 与腔长](https://luobaoer.github.io/laser-atlas/#/lesson/solid-03)
 2. [传播矩阵原理专题（图解 + 交互练习）](https://luobaoer.github.io/laser-atlas/#/principle/raymatrix)
 3. [固体激光公式符号手册](https://luobaoer.github.io/laser-atlas/#/formulas/solid)
+4. [新课程：从 ABCD 到各元件位置设计](https://luobaoer.github.io/laser-atlas/#/lesson/solid-03b)
+5. [交互工具：1064 nm 三镜腔模设计器](https://luobaoer.github.io/laser-atlas/tools/resonator1064/)
 
 ## 网站版本与历史快照
 
@@ -25,7 +27,9 @@
 | 2026-10-29 | v0.3.3 | [查看修复备份](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.3.3/) | 图文同步、分式初步调整；未正式上线的草稿已修复脚本错误后归档 |
 | 2026-10-30 | v0.3.4 | [查看当前版本快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-30_v0.3.4/) | 四类激光器课程与公式手册全面改为上下分式 |
 
-**更新与回退规则：** 根目录 `index.html` 始终用于线上首页。每次发布前，先把旧站完整存入 `versions/YYYY-MM-DD_vX.Y.Z/index.html`；再将新版本同时写入版本目录和根目录。需要回退时，将对应历史快照内容复制回根目录 `index.html` 并提交。原有历史快照不删除。
+| 2026-10-30 | v0.4.0 | [打开本版快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-30_v0.4.0/) | 1064 nm 三镜腔模设计、双轴 q、参考面光斑、热透镜扫描与导出 |
+
+**更新与回退规则：** 根目录 `index.html` 始终用于线上首页。每次发布前，先把旧站完整存入 `versions/YYYY-MM-DD_vX.Y.Z/index.html`；再将新版本同时写入版本目录和根目录。需要回退时，将对应历史快照内容复制回根目录 `index.html` 并提交；V0.4.0 及后续版本还需要同步回退其 `tools/` 子目录。原有历史快照不删除。
 
 ## 学习记录
 
