@@ -6,7 +6,7 @@
 
 ## 当前版本
 
-**2026-10-29 · v0.3.2** — 按光学工程教材的深度扩展传播矩阵：近轴条件、严格数学推导、完整算例、介质约化角、q 参数和三镜腔工程边界；保留原课程结构与交互。
+**2026-10-30 · v0.3.4** — 全站数学分式统一采用分子在上、分母在下的专业排版，覆盖固体、光纤、CO₂ 与蓝光公式手册及核心课程；保留术语解释、交互工具和原有教学流程。
 
 1. [固体激光：高斯光束、ABCD 与腔长](https://luobaoer.github.io/laser-atlas/#/lesson/solid-03)
 2. [传播矩阵原理专题（图解 + 交互练习）](https://luobaoer.github.io/laser-atlas/#/principle/raymatrix)
@@ -21,6 +21,9 @@
 | 2026-10-29 | v0.3.1 | [打开最新版本快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.3.1/) | 方阵与列向量排版、聊天式推导、图解及动态矩阵 |
 
 | 2026-10-29 | v0.3.2 | [查看专业版快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.3.2/) | 专业传播矩阵教材；12 个完整小节、公式推导、介质折射与腔模算例 |
+
+| 2026-10-29 | v0.3.3 | [查看修复备份](https://luobaoer.github.io/laser-atlas/versions/2026-10-29_v0.3.3/) | 图文同步、分式初步调整；未正式上线的草稿已修复脚本错误后归档 |
+| 2026-10-30 | v0.3.4 | [查看当前版本快照](https://luobaoer.github.io/laser-atlas/versions/2026-10-30_v0.3.4/) | 四类激光器课程与公式手册全面改为上下分式 |
 
 **更新与回退规则：** 根目录 `index.html` 始终用于线上首页。每次发布前，先把旧站完整存入 `versions/YYYY-MM-DD_vX.Y.Z/index.html`；再将新版本同时写入版本目录和根目录。需要回退时，将对应历史快照内容复制回根目录 `index.html` 并提交。原有历史快照不删除。
 
