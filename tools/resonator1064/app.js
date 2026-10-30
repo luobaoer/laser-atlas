@@ -101,7 +101,7 @@
   function renderSpot(r){$('spot').innerHTML=spotSVG(r);}
   function renderAll(){try{
       const x=core.solve(state);result=x;
-      renderMetrics(x);renderTopology(x);renderEnvelope(x);renderMatrix(x);renderPlanes(x);renderSpot(x);renderThermal(x);
+      renderMetrics(x);renderTopology(x);renderEnvelope(x);renderMatrix(x);renderPlanes(x);renderSpot(x);renderThermal(x);if(window.LaserAtlasPumpUI)window.LaserAtlasPumpUI.update(x);
       $('saveStatus').textContent='✓ 当前参数有效 · 自动保存';
     }catch(e){$('saveStatus').textContent='参数有误：'+e.message;
       $('metrics').innerHTML=`<div class="failed" style="grid-column:1/-1">${escapeHtml(e.message)}</div>`;}
@@ -117,15 +117,15 @@
   document.addEventListener('change',e=>{if(e.target.matches('[data-path]'))recalc();});
   document.addEventListener('click',e=>{
     const line=e.target.closest('[data-select]');if(line){selected=line.dataset.select;if(result){renderPlanes(result);renderSpot(result);renderEnvelope(result);renderTopology(result);}return;}
-    if(e.target.id==='reset'){state=core.clone(core.DEFAULT);selected='gainCenter';fillForm();save();renderAll();}
+    if(e.target.id==='reset'){state=core.clone(core.DEFAULT);selected='gainCenter';fillForm();save();if(window.LaserAtlasPumpUI)window.LaserAtlasPumpUI.reset();renderAll();}
     if(e.target.id==='sortZ'){sortReverse=!sortReverse;e.target.textContent=sortReverse?'倒序显示（点此正序）':'按位置排序';if(result)renderPlanes(result);}
-    if(e.target.id==='exportJson'){const obj={kind:'LaserAtlas-1064-Design',schemaVersion:1,exported:new Date().toISOString(),params:state};download('laser-atlas-1064-design.json',JSON.stringify(obj,null,2),'application/json;charset=utf-8');}
+    if(e.target.id==='exportJson'){const obj={kind:'LaserAtlas-1064-Design',schemaVersion:2,exported:new Date().toISOString(),params:state,pumpParams:window.LaserAtlasPumpUI?.getState?.()??null};download('laser-atlas-1064-design.json',JSON.stringify(obj,null,2),'application/json;charset=utf-8');}
     if(e.target.id==='exportCsv'&&result){const rows=[['面','位置_mm','介质折射率','w_T_um','w_S_um','Rw_T_mm','Rw_S_mm','qReduced_T_real_mm','qReduced_T_imag_mm','qReduced_S_real_mm','qReduced_S_imag_mm','孔径直径_mm','a/w_max']];
       for(const r of result.rows)rows.push([r.name,r.zmm,r.n,r.T?.wUm??'',r.S?.wUm??'',r.T?.Rmm??'',r.S?.Rmm??'',r.T?.qReMm??'',r.T?.qImMm??'',r.S?.qReMm??'',r.S?.qImMm??'',r.apertureMm??'',r.clearance??'']);
       const csv='\ufeff'+rows.map(x=>x.map(y=>`"${String(y).replace(/"/g,'""')}"`).join(',')).join('\r\n');download('laser-atlas-1064-planes.csv',csv,'text/csv;charset=utf-8');
     }
   });
   document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-select]')){e.preventDefault();e.target.click();}});
-  $('importJson').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.kind!=='LaserAtlas-1064-Design'||!data.params)throw Error('不是本工具的设计参数文件');core.validate(data.params);state=data.params;fillForm();save();renderAll();}catch(err){$('saveStatus').textContent='导入失败：'+err.message;}e.target.value='';});
+  $('importJson').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.kind!=='LaserAtlas-1064-Design'||!data.params)throw Error('不是本工具的设计参数文件');core.validate(data.params);state=data.params;fillForm();if(data.pumpParams&&window.LaserAtlasPumpUI)window.LaserAtlasPumpUI.setState(data.pumpParams);save();renderAll();}catch(err){$('saveStatus').textContent='导入失败：'+err.message;}e.target.value='';});
   core.numericCheck();state=restore();fillForm();renderAll();
 })();
